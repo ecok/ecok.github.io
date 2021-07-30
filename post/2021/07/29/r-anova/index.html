@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title> R 方差分析：以多物种、双因素为例 | 有油</title>
+    
+    
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    <link rel="stylesheet" href="/css/custom.css" />
+    <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="R 方差分析：以多物种、双因素为例"/>
+<meta name="twitter:description" content="本分析以多物种、双因素为例，展示常用的方差分析的 R 实现。"/>
+
+
+  </head>
+
+  <body>
+
+    <nav class="menu">
+    <ul>
+      <li class="left">
+        <a href="/"><span>有油</span></a>
+      </li>
+      
+      <li>
+        <a href="/">首页</a>
+      </li>
+      
+      <li>
+        <a href="/archieve/">归档</a>
+      </li>
+      
+      <li id="menu-search">
+        <a href="/#">搜索</a>
+      </li>
+      
+      <li>
+        <a href="/index.xml">订阅</a>
+      </li>
+      
+    </ul>
+    </nav>
+
+
+<div class="container single">
+<main>
+
+<div class="article-meta">
+<h1><span class="title">R 方差分析：以多物种、双因素为例</span></h1>
+
+<h3 class="author">
+sanchufy
+</h3>
+
+<h3 class="date">2021-07-29</h3>
+<p class="terms">
+  
+  
+  Categories: <a href="/categories/r">R</a> <a href="/categories/%E7%BB%9F%E8%AE%A1">统计</a> 
+  
+  
+  
+  Tags: <a href="/tags/%E6%96%B9%E5%B7%AE%E5%88%86%E6%9E%90">方差分析</a> 
+  
+  
+</p>
+</div>
+
+<div class="article">
+
+
+
+<p><strong>警示：水平有限，以下内容均有可能存在错漏！</strong></p>
+<p><strong>如有发现，请下方留言或提交 <a href="https://github.com/pftz/pftz/pulls">pull request</a>，感谢您的贡献！</strong></p>
+<blockquote>
+<p>仅供参考的示例；
+没有通用的模板。
+了解统计更重要；
+照搬后果请自负。</p>
+</blockquote>
+<p>本分析以多物种、双因素为例，展示常用的方差分析的 R 实现。当然，通过少量的调整，也可以向下兼容：单物种、单因素；也可能向上兼容：三因素至多因素。例如，“三因素”可假想成“双因素中的一个因素再包含一双因素”，一些双因素的函数通过自我函数嵌套，可实现扩展。</p>
+<p>一个分析需求，常常对应着多种 R 实现，本示例列举了常用的几种。有些采用 R 中常用的批量（如循环、重复、分组等）计算方式，尽可能地避免使用大量重复代码；有些方法为了篇幅的简洁，仅以局部单一情况做演示，但是它们都可以用类似的方式实现批量计算，参照上下文自行调整即可。</p>
+<p>本示例原文档下载地址：<a href="https://github.com/pftz/pftz/blob/master/content/post/2021-07-23-r-anova/index.Rmd" class="uri">https://github.com/pftz/pftz/blob/master/content/post/2021-07-23-r-anova/index.Rmd</a></p>
+<div id="示例数据" class="section level2">
+<h2>示例数据</h2>
+<ul>
+<li>x，自变量，解释变量，预测变量，独立变量，IV (Independent variables)</li>
+<li>y，因变量，响应变量，结果变量，依赖变量，DV (Dependent variables)</li>
+</ul>
+<ol style="list-style-type: decimal">
+<li>构建示例用数据</li>
+</ol>
+<pre class="r"><code># 构建一个伪造的示例数据框
+set.seed(110)
+
+df &lt;- data.frame(
+    drought = rep(c(&quot;D25&quot;, &quot;D50&quot;, &quot;D75&quot;), each = 20, times = 2),
+    fertilizer = rep(c(&quot;CK&quot;, &quot;NPK&quot;), each = 60),
+    species = rep(c(&quot;AA&quot;, &quot;BB&quot;, &quot;CC&quot;, &quot;DD&quot;), each = 5, times = 6),
+    biomass = sort(rnorm(120, mean = 0.8, sd = 0.2)),
+    height =sort(rnorm(120, mean = 22.2, sd = 7.1)))
+
+# 人为打乱一些数据
+for(i in 1:(120/40)){
+    k &lt;- 1 + 40*(i-1)
+    set.seed(110)
+    df$biomass[(k+9):(k+29)] &lt;- sample(df$biomass[(k+9):(k+29)])
+}
+df$biomass &lt;- df$biomass[c(21:60, 101:120, 1:20, 61:100)]
+
+# 清除环境中的临时变量
+rm(list = c(&quot;i&quot;, &quot;k&quot;))</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>查看数据</li>
+</ol>
+<pre class="r"><code># 将多列转换为因子型变量
+# col_factor &lt;- c(&quot;drought&quot;, &quot;fertilizer&quot;, &quot;species&quot;)
+# df[, col_factor] &lt;- lapply(df[, col_factor], factor)
+
+# 计数或四分位数、平均值
+summary(df)</code></pre>
+<pre><code>##  drought  fertilizer species    biomass           height      
+##  D25:40   CK :60     AA:30   Min.   :0.2450   Min.   : 4.828  
+##  D50:40   NPK:60     BB:30   1st Qu.:0.6620   1st Qu.:15.989  
+##  D75:40              CC:30   Median :0.7873   Median :21.293  
+##                      DD:30   Mean   :0.7884   Mean   :20.905  
+##                              3rd Qu.:0.8926   3rd Qu.:25.497  
+##                              Max.   :1.1809   Max.   :36.640</code></pre>
+<pre class="r"><code># 列联表
+# table(df[, -which(names(df) %in% c(&quot;biomass&quot;, &quot;height&quot;))])
+# xtabs(biomass ~ drought + fertilizer + species, data = df)</code></pre>
+<p>这是一个伪造的数据集，共 5 个变量。1 个分组（4 个物种），2 个处理，每组处理 5 个重复，共 3 × 2 × 4 × 5 = 120 个观测：</p>
+<ul>
+<li><strong>drought</strong> <strong>干旱</strong>处理：分类变量，3 水平
+<ul>
+<li>正常浇水量的百分比，如<code>75%</code> (28 ml)、<code>50%</code> (20 ml)、<code>25%</code> (12 ml)</li>
+</ul></li>
+<li><strong>fertilizer</strong> <strong>施肥</strong>处理：分类变量，2 水平</li>
+<li><strong>species</strong> <strong>物种</strong>：分类变量，4 水平</li>
+<li><strong>biomass</strong> <strong>生物量</strong>：连续变量</li>
+<li><strong>height</strong> <strong>高度</strong>：连续变量</li>
+</ul>
+</div>
+<div id="描述性分析简略版" class="section level2">
+<h2>描述性分析（简略版）</h2>
+<p>先了解你的数据。</p>
+<pre class="r"><code># 不区分物种
+# ----------
+# 箱线图
+boxplot(biomass ~ drought + fertilizer, data = df)</code></pre>
+<p><img src="/post/2021/07/29/r-anova/index_files/figure-html/unnamed-chunk-3-1.svg" width="672" /></p>
+<pre class="r"><code># 以物种进行分组
+# --------------
+library(lattice)
+# 散点 + 连线
+xyplot(biomass ~ drought | fertilizer, 
+       groups = species, data = df, 
+       type=&#39;b&#39;, auto.key = list(columns = 4),
+       scales=list(alternating=FALSE))</code></pre>
+<p><img src="/post/2021/07/29/r-anova/index_files/figure-html/unnamed-chunk-4-1.svg" width="672" /></p>
+<pre class="r"><code># 直方图
+library(ggplot2)
+ggplot(df, aes(x = biomass)) + 
+    geom_histogram(bins = 30) + 
+    facet_wrap(~ species, ncol = 2) + 
+    theme_bw()</code></pre>
+<p><img src="/post/2021/07/29/r-anova/index_files/figure-html/unnamed-chunk-4-2.svg" width="672" /></p>
+<pre class="r"><code># 箱线图
+ggplot(df, aes(x = drought, y = biomass, 
+               fill = fertilizer)) +
+    geom_boxplot() +
+    facet_wrap(~species, scale=&quot;free&quot;)</code></pre>
+<p><img src="/post/2021/07/29/r-anova/index_files/figure-html/unnamed-chunk-4-3.svg" width="672" /></p>
+<pre class="r"><code># 条形图/柱状图
+# -------------
+# 计算平均值和标准误
+bygroup_mean &lt;- aggregate(
+    cbind(biomass, height) ~ drought + fertilizer + species, df,
+    function(x) cbind(mean(x), sd(x)))
+bygroup_mean &lt;- do.call(data.frame, bygroup_mean)
+names(bygroup_mean) &lt;- gsub(&quot;.1&quot;, &quot;&quot;, 
+    names(bygroup_mean), fixed = T)
+names(bygroup_mean) &lt;- gsub(&quot;.2&quot;, &quot;_sd&quot;,
+    names(bygroup_mean), fixed = T)
+
+# 分面作图
+ggplot(bygroup_mean, aes(x = drought, y = biomass, 
+               fill = fertilizer)) +
+    geom_col(position = &quot;dodge&quot;, color = &quot;black&quot;) +
+    geom_errorbar(aes(ymin = biomass, 
+                      ymax = biomass + biomass_sd),
+                  width=.2,
+                 position=position_dodge(.9)) +
+    facet_wrap(~species, scale=&quot;free&quot;)</code></pre>
+<p><img src="/post/2021/07/29/r-anova/index_files/figure-html/unnamed-chunk-4-4.svg" width="672" /></p>
+</div>
+<div id="方差分析" class="section level2">
+<h2>方差分析</h2>
+<p>一般流程:</p>
+<ol style="list-style-type: decimal">
+<li>分析：
+<ul>
+<li>是否有协变量？</li>
+<li>是否存在交互作用？</li>
+</ul></li>
+<li>假设检验：独立、正态、等方差</li>
+<li>多重比较</li>
+<li>作图</li>
+</ol>
+<div id="单因素" class="section level3">
+<h3>单因素</h3>
+<p>如果实验仅关注一个处理，其它条件均相同，分析不同干旱处理对生物量的影响。</p>
+<pre class="r"><code># 提取某个处理单独的数据（用于示例）
+df_aa_npk &lt;- subset(df, species == &quot;AA&quot; &amp; fertilizer == &quot;NPK&quot;)</code></pre>
+<pre class="r"><code># 方法一：stats::aov
+aov_b1dry &lt;- aov(biomass ~ drought, data = df_aa_npk)
+
+summary(aov_b1dry)</code></pre>
+<pre><code>##             Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+## drought      2 0.6133 0.30664   93.43 4.83e-08 ***
+## Residuals   12 0.0394 0.00328                     
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code># 方法二：回归方法
+# 默认第一个水平（fertilizer: Control）为参照
+levels(df_aa_npk$drought)</code></pre>
+<pre><code>## [1] &quot;D25&quot; &quot;D50&quot; &quot;D75&quot;</code></pre>
+<pre class="r"><code>lm_b1dry &lt;- lm(biomass ~ drought, data = df_aa_npk)
+# summary(lm_b1fert)
+anova(lm_b1dry)</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: biomass
+##           Df  Sum Sq  Mean Sq F value    Pr(&gt;F)    
+## drought    2 0.61328 0.306639  93.427 4.829e-08 ***
+## Residuals 12 0.03939 0.003282                      
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code># 方法三：car::Anova
+library(car)
+Anova(lm_b1dry)</code></pre>
+<pre><code>## Anova Table (Type II tests)
+## 
+## Response: biomass
+##            Sum Sq Df F value    Pr(&gt;F)    
+## drought   0.61328  2  93.427 4.829e-08 ***
+## Residuals 0.03939 12                      
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<div id="手算方差分析平方和番外" class="section level4">
+<h4>手算方差分析平方和（番外）</h4>
+<p>组间平方和<br />
+Sum of Squares due to Treatment (SSTR)<br />
+the treatment sum of squares<br />
+the sum of squares for treatments</p>
+<p><span class="math display">\[
+\begin{align}
+SSTR &amp; = \sum_{i=1}^k\sum_{j=1}^n(\bar x_i-\bar x&#39;)^2 \\
+&amp; = \Sigma_{i=1}^kn_i(\bar x_i-\bar x&#39;)^2 \\
+&amp; = \sum_{i}n_i(\overline{Y}_i-\overline{Y}_{total})^2
+\end{align}
+\]</span></p>
+<p>组内平方和<br />
+the Sum of Squares due to Error (SSE)<br />
+the error sum of squares<br />
+the sum of squares of the residual error</p>
+<p><span class="math display">\[
+\begin{align}
+SSE &amp; = \sum_{i=1}^k\sum_{j=1}^n(x_ij-\bar x_i)^2 \\ 
+    &amp; = \sum_{i}\sum_{j}(Y_{ij}-\overline{Y}_i)^2
+\end{align}
+\]</span></p>
+<pre class="r"><code>#- 组间平方和 within groups，处理误差
+# 5 个重复
+sum((tapply(df_aa_npk$biomass, df_aa_npk$drought, mean) - mean(df_aa_npk$biomass))^2)*5</code></pre>
+<pre><code>## [1] 0.6132778</code></pre>
+<pre class="r"><code>#- 组内平方和 between groups，随机误差
+# 4 个物种
+sum((tapply(df_aa_npk$biomass,df_aa_npk$drought,var)))*4</code></pre>
+<pre><code>## [1] 0.0393857</code></pre>
+</div>
+</div>
+<div id="多因素" class="section level3">
+<h3>多因素</h3>
+<p>本示例为重复试验、非重复测量。</p>
+<ol style="list-style-type: decimal">
+<li>分析不同物种、不同种植密度、不同施肥处理对产量的影响，即把物种也视为一种处理（不推荐）：</li>
+</ol>
+<pre class="r"><code># 不含交互项
+aov_b2main &lt;- aov(
+    biomass ~ drought + fertilizer + species, 
+    data = df)
+
+# 含交互项
+# 方法一
+aov_b2mix &lt;- aov(
+    biomass ~ species + drought*fertilizer, 
+    data = df)
+
+summary(aov_b2mix)</code></pre>
+<p>使用回归进行 ANOVA 分析，结果可等同。</p>
+<pre class="r"><code># 方法二
+lrm_b2mix &lt;- lm(
+    biomass ~ species + drought*fertilizer, 
+    data = df)
+# summary(fit_2inter_lm)
+anova(lrm_b2mix)</code></pre>
+<pre class="r"><code># 方法三
+# library(car)
+Anova(lrm_b2mix)</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>分析各物种，不同种植密度、不同施肥处理对产量的影响（推荐）：</li>
+</ol>
+<pre class="r"><code># 方法一
+lrm_b2mix_sp &lt;- with(df, 
+    by(df, species, 
+        function (d) lm(biomass ~ drought*fertilizer, data = d)))
+
+ano_b2mix_sp &lt;- lapply(lrm_b2mix_sp, anova)</code></pre>
+<pre class="r"><code># 将方法一输出为整洁的结果
+# 方法 A
+library(broom)
+ano_b2mix_sp_res &lt;- lapply(
+    ano_b2mix_sp, 
+    function(f) broom::tidy(f))
+
+ano_b2mix_sp_res &lt;- Map(
+    function(x, y) cbind(&quot;species&quot; = rep(y, nrow(x)), x), 
+    ano_b2mix_sp_res, 
+    names(ano_b2mix_sp_res))
+
+ano_b2mix_sp_resDF &lt;- do.call(rbind, ano_b2mix_sp_res)
+row.names(ano_b2mix_sp_resDF) &lt;- NULL
+
+knitr::kable(ano_b2mix_sp_resDF)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">species</th>
+<th align="left">term</th>
+<th align="right">df</th>
+<th align="right">sumsq</th>
+<th align="right">meansq</th>
+<th align="right">statistic</th>
+<th align="right">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">AA</td>
+<td align="left">drought</td>
+<td align="right">2</td>
+<td align="right">0.8372985</td>
+<td align="right">0.4186493</td>
+<td align="right">187.567103</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">AA</td>
+<td align="left">fertilizer</td>
+<td align="right">1</td>
+<td align="right">0.0244060</td>
+<td align="right">0.0244060</td>
+<td align="right">10.934589</td>
+<td align="right">0.0029627</td>
+</tr>
+<tr class="odd">
+<td align="left">AA</td>
+<td align="left">drought:fertilizer</td>
+<td align="right">2</td>
+<td align="right">0.0711375</td>
+<td align="right">0.0355688</td>
+<td align="right">15.935844</td>
+<td align="right">0.0000395</td>
+</tr>
+<tr class="even">
+<td align="left">AA</td>
+<td align="left">Residuals</td>
+<td align="right">24</td>
+<td align="right">0.0535679</td>
+<td align="right">0.0022320</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">BB</td>
+<td align="left">drought</td>
+<td align="right">2</td>
+<td align="right">0.6615400</td>
+<td align="right">0.3307700</td>
+<td align="right">136.238487</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">BB</td>
+<td align="left">fertilizer</td>
+<td align="right">1</td>
+<td align="right">0.0124295</td>
+<td align="right">0.0124295</td>
+<td align="right">5.119517</td>
+<td align="right">0.0329876</td>
+</tr>
+<tr class="odd">
+<td align="left">BB</td>
+<td align="left">drought:fertilizer</td>
+<td align="right">2</td>
+<td align="right">0.0267120</td>
+<td align="right">0.0133560</td>
+<td align="right">5.501107</td>
+<td align="right">0.0107991</td>
+</tr>
+<tr class="even">
+<td align="left">BB</td>
+<td align="left">Residuals</td>
+<td align="right">24</td>
+<td align="right">0.0582690</td>
+<td align="right">0.0024279</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">CC</td>
+<td align="left">drought</td>
+<td align="right">2</td>
+<td align="right">0.7253164</td>
+<td align="right">0.3626582</td>
+<td align="right">607.291396</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">CC</td>
+<td align="left">fertilizer</td>
+<td align="right">1</td>
+<td align="right">0.0138627</td>
+<td align="right">0.0138627</td>
+<td align="right">23.213839</td>
+<td align="right">0.0000660</td>
+</tr>
+<tr class="odd">
+<td align="left">CC</td>
+<td align="left">drought:fertilizer</td>
+<td align="right">2</td>
+<td align="right">0.0414223</td>
+<td align="right">0.0207111</td>
+<td align="right">34.681946</td>
+<td align="right">0.0000001</td>
+</tr>
+<tr class="even">
+<td align="left">CC</td>
+<td align="left">Residuals</td>
+<td align="right">24</td>
+<td align="right">0.0143322</td>
+<td align="right">0.0005972</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">DD</td>
+<td align="left">drought</td>
+<td align="right">2</td>
+<td align="right">0.8125720</td>
+<td align="right">0.4062860</td>
+<td align="right">478.368165</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">DD</td>
+<td align="left">fertilizer</td>
+<td align="right">1</td>
+<td align="right">0.0443330</td>
+<td align="right">0.0443330</td>
+<td align="right">52.198449</td>
+<td align="right">0.0000002</td>
+</tr>
+<tr class="odd">
+<td align="left">DD</td>
+<td align="left">drought:fertilizer</td>
+<td align="right">2</td>
+<td align="right">0.0973628</td>
+<td align="right">0.0486814</td>
+<td align="right">57.318351</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">DD</td>
+<td align="left">Residuals</td>
+<td align="right">24</td>
+<td align="right">0.0203836</td>
+<td align="right">0.0008493</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>library(pander)
+pander(ano_b2mix_sp_resDF)</code></pre>
+<table>
+<colgroup>
+<col width="12%" />
+<col width="25%" />
+<col width="6%" />
+<col width="12%" />
+<col width="14%" />
+<col width="14%" />
+<col width="14%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">species</th>
+<th align="center">term</th>
+<th align="center">df</th>
+<th align="center">sumsq</th>
+<th align="center">meansq</th>
+<th align="center">statistic</th>
+<th align="center">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">AA</td>
+<td align="center">drought</td>
+<td align="center">2</td>
+<td align="center">0.8373</td>
+<td align="center">0.4186</td>
+<td align="center">187.6</td>
+<td align="center">2.234e-15</td>
+</tr>
+<tr class="even">
+<td align="center">AA</td>
+<td align="center">fertilizer</td>
+<td align="center">1</td>
+<td align="center">0.02441</td>
+<td align="center">0.02441</td>
+<td align="center">10.93</td>
+<td align="center">0.002963</td>
+</tr>
+<tr class="odd">
+<td align="center">AA</td>
+<td align="center">drought:fertilizer</td>
+<td align="center">2</td>
+<td align="center">0.07114</td>
+<td align="center">0.03557</td>
+<td align="center">15.94</td>
+<td align="center">3.947e-05</td>
+</tr>
+<tr class="even">
+<td align="center">AA</td>
+<td align="center">Residuals</td>
+<td align="center">24</td>
+<td align="center">0.05357</td>
+<td align="center">0.002232</td>
+<td align="center">NA</td>
+<td align="center">NA</td>
+</tr>
+<tr class="odd">
+<td align="center">BB</td>
+<td align="center">drought</td>
+<td align="center">2</td>
+<td align="center">0.6615</td>
+<td align="center">0.3308</td>
+<td align="center">136.2</td>
+<td align="center">7.919e-14</td>
+</tr>
+<tr class="even">
+<td align="center">BB</td>
+<td align="center">fertilizer</td>
+<td align="center">1</td>
+<td align="center">0.01243</td>
+<td align="center">0.01243</td>
+<td align="center">5.12</td>
+<td align="center">0.03299</td>
+</tr>
+<tr class="odd">
+<td align="center">BB</td>
+<td align="center">drought:fertilizer</td>
+<td align="center">2</td>
+<td align="center">0.02671</td>
+<td align="center">0.01336</td>
+<td align="center">5.501</td>
+<td align="center">0.0108</td>
+</tr>
+<tr class="even">
+<td align="center">BB</td>
+<td align="center">Residuals</td>
+<td align="center">24</td>
+<td align="center">0.05827</td>
+<td align="center">0.002428</td>
+<td align="center">NA</td>
+<td align="center">NA</td>
+</tr>
+<tr class="odd">
+<td align="center">CC</td>
+<td align="center">drought</td>
+<td align="center">2</td>
+<td align="center">0.7253</td>
+<td align="center">0.3627</td>
+<td align="center">607.3</td>
+<td align="center">2.802e-21</td>
+</tr>
+<tr class="even">
+<td align="center">CC</td>
+<td align="center">fertilizer</td>
+<td align="center">1</td>
+<td align="center">0.01386</td>
+<td align="center">0.01386</td>
+<td align="center">23.21</td>
+<td align="center">6.596e-05</td>
+</tr>
+<tr class="odd">
+<td align="center">CC</td>
+<td align="center">drought:fertilizer</td>
+<td align="center">2</td>
+<td align="center">0.04142</td>
+<td align="center">0.02071</td>
+<td align="center">34.68</td>
+<td align="center">8.325e-08</td>
+</tr>
+<tr class="even">
+<td align="center">CC</td>
+<td align="center">Residuals</td>
+<td align="center">24</td>
+<td align="center">0.01433</td>
+<td align="center">0.0005972</td>
+<td align="center">NA</td>
+<td align="center">NA</td>
+</tr>
+<tr class="odd">
+<td align="center">DD</td>
+<td align="center">drought</td>
+<td align="center">2</td>
+<td align="center">0.8126</td>
+<td align="center">0.4063</td>
+<td align="center">478.4</td>
+<td align="center">4.612e-20</td>
+</tr>
+<tr class="even">
+<td align="center">DD</td>
+<td align="center">fertilizer</td>
+<td align="center">1</td>
+<td align="center">0.04433</td>
+<td align="center">0.04433</td>
+<td align="center">52.2</td>
+<td align="center">1.825e-07</td>
+</tr>
+<tr class="odd">
+<td align="center">DD</td>
+<td align="center">drought:fertilizer</td>
+<td align="center">2</td>
+<td align="center">0.09736</td>
+<td align="center">0.04868</td>
+<td align="center">57.32</td>
+<td align="center">7.244e-10</td>
+</tr>
+<tr class="even">
+<td align="center">DD</td>
+<td align="center">Residuals</td>
+<td align="center">24</td>
+<td align="center">0.02038</td>
+<td align="center">0.0008493</td>
+<td align="center">NA</td>
+<td align="center">NA</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># 方法 B
+library(stargazer)
+stargazer(ano_b2mix_sp_res,
+    type = &quot;text&quot;,
+    title = &quot;Analysis of variance of Biomass&quot;,
+    digits = 3)</code></pre>
+<pre><code>## 
+## Analysis of variance of Biomass
+## ============================================================
+## Statistic N  Mean  St. Dev.  Min   Pctl(25) Pctl(75)   Max  
+## ------------------------------------------------------------
+## df        4 7.250   11.177    1      1.8      7.5      24   
+## sumsq     4 0.247   0.394   0.024   0.046    0.263    0.837 
+## meansq    4 0.120   0.199   0.002   0.019    0.131    0.419 
+## statistic 3 71.479 100.566  10.935  13.435  101.751  187.567
+## p.value   3 0.001   0.002   0.000  0.00002   0.002    0.003 
+## ------------------------------------------------------------
+## 
+## Analysis of variance of Biomass
+## ===========================================================
+## Statistic N  Mean  St. Dev.  Min  Pctl(25) Pctl(75)   Max  
+## -----------------------------------------------------------
+## df        4 7.250   11.177    1     1.8      7.5      24   
+## sumsq     4 0.190   0.315   0.012  0.023    0.209    0.662 
+## meansq    4 0.090   0.161   0.002  0.010    0.093    0.331 
+## statistic 3 48.953  75.592  5.120  5.310    70.870  136.238
+## p.value   3 0.015   0.017   0.000  0.005    0.022    0.033 
+## -----------------------------------------------------------
+## 
+## Analysis of variance of Biomass
+## =============================================================
+## Statistic N  Mean   St. Dev.  Min   Pctl(25) Pctl(75)   Max  
+## -------------------------------------------------------------
+## df        4  7.250   11.177    1      1.8      7.5      24   
+## sumsq     4  0.199   0.351   0.014   0.014    0.212    0.725 
+## meansq    4  0.099   0.176   0.001   0.011    0.106    0.363 
+## statistic 3 221.729 333.956  23.214  28.948  320.987  607.291
+## p.value   3 0.00002 0.00004  0.000  0.00000  0.00003  0.0001 
+## -------------------------------------------------------------
+## 
+## Analysis of variance of Biomass
+## =============================================================
+## Statistic N  Mean   St. Dev.  Min   Pctl(25) Pctl(75)   Max  
+## -------------------------------------------------------------
+## df        4  7.250   11.177    1      1.8      7.5      24   
+## sumsq     4  0.244   0.381   0.020   0.038    0.276    0.813 
+## meansq    4  0.125   0.189   0.001   0.033    0.138    0.406 
+## statistic 3 195.962 244.585  52.198  54.758  267.843  478.368
+## p.value   3 0.00000 0.00000  0.000   0.000   0.00000  0.00000
+## -------------------------------------------------------------</code></pre>
+<pre class="r"><code># 导出结果
+# 方法 A
+write.csv(ano_b2mix_sp_resdf, 
+          file = &quot;output/Biomass-anova-results.csv&quot;, 
+          fileEncoding = &quot;utf-8&quot;)
+# 方法 B
+stargazer(ano_b2mix_sp_res,
+    type = &quot;html&quot;,
+    title = &quot;Analysis of variance of Biomass&quot;,
+    digits = 3,
+    out = &quot;output/Biomass-anova-results.html&quot;)</code></pre>
+<pre class="r"><code># 方法二
+library(nlme)
+# library(lme4)
+
+lme_b2mix_sp &lt;- lmList(
+    biomass ~ drought*fertilizer | species, 
+    data = df)
+
+lapply(lme_b2mix_sp, anova)</code></pre>
+<pre><code>## $AA
+## Analysis of Variance Table
+## 
+## Response: biomass
+##                    Df  Sum Sq Mean Sq F value    Pr(&gt;F)    
+## drought             2 0.83730 0.41865 187.567 2.234e-15 ***
+## fertilizer          1 0.02441 0.02441  10.935  0.002963 ** 
+## drought:fertilizer  2 0.07114 0.03557  15.936 3.947e-05 ***
+## Residuals          24 0.05357 0.00223                      
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## $BB
+## Analysis of Variance Table
+## 
+## Response: biomass
+##                    Df  Sum Sq Mean Sq  F value    Pr(&gt;F)    
+## drought             2 0.66154 0.33077 136.2385 7.919e-14 ***
+## fertilizer          1 0.01243 0.01243   5.1195   0.03299 *  
+## drought:fertilizer  2 0.02671 0.01336   5.5011   0.01080 *  
+## Residuals          24 0.05827 0.00243                       
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## $CC
+## Analysis of Variance Table
+## 
+## Response: biomass
+##                    Df  Sum Sq Mean Sq F value    Pr(&gt;F)    
+## drought             2 0.72532 0.36266 607.291 &lt; 2.2e-16 ***
+## fertilizer          1 0.01386 0.01386  23.214 6.596e-05 ***
+## drought:fertilizer  2 0.04142 0.02071  34.682 8.325e-08 ***
+## Residuals          24 0.01433 0.00060                      
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## $DD
+## Analysis of Variance Table
+## 
+## Response: biomass
+##                    Df  Sum Sq Mean Sq F value    Pr(&gt;F)    
+## drought             2 0.81257 0.40629 478.368 &lt; 2.2e-16 ***
+## fertilizer          1 0.04433 0.04433  52.198 1.825e-07 ***
+## drought:fertilizer  2 0.09736 0.04868  57.318 7.244e-10 ***
+## Residuals          24 0.02038 0.00085                      
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code># 方法三
+library(plyr)
+lrm_b2mix_sp_ply &lt;- dlply(df, &quot;species&quot;, 
+      function(d) lm(biomass ~ drought*fertilizer, data = d))</code></pre>
+<p>另参考：</p>
+<ul>
+<li><a href="https://stackoverflow.com/q/1169539">Linear Regression and group by in R</a></li>
+<li><a href="https://stackoverflow.com/a/39769703">Fitting linear model / ANOVA by group</a></li>
+</ul>
+<div id="交互作用" class="section level4">
+<h4>交互作用</h4>
+<pre class="r"><code># 方法一
+# plot.new()
+par(mfrow = c(2, 2))
+with(df, by(df, species, function (d){
+    # 设定图的宽、长
+    # par(pin = c(2,1));
+    with(d, 
+        interaction.plot(drought, fertilizer, biomass,
+        type = &quot;b&quot;,
+        col = c(&quot;red&quot;, &quot;blue&quot;),
+        pch = c(1, 16),
+        main = &quot;Interaction between drought and fertilizer&quot;))}))</code></pre>
+<p><img src="/post/2021/07/29/r-anova/index_files/figure-html/unnamed-chunk-19-1.svg" width="672" /></p>
+<pre><code>## species: AA
+## NULL
+## ------------------------------------------------------------ 
+## species: BB
+## NULL
+## ------------------------------------------------------------ 
+## species: CC
+## NULL
+## ------------------------------------------------------------ 
+## species: DD
+## NULL</code></pre>
+<pre class="r"><code># 方法二
+library(gplots)
+# plot.new()
+par(mfrow = c(2, 2))
+by(df, df$species, function (d){
+    plotmeans(biomass ~ interaction(fertilizer, drought, sep = &quot;:&quot;),
+    data = d,
+    connect = list(c(1, 3, 5), c(2, 4, 6)),
+    col = c(&quot;red&quot;, &quot;blue&quot;),
+    main = &quot;Interaction Plot with 95% CIs&quot;,
+    xlab = &quot;drought:Fertilizer&quot;)})</code></pre>
+<p><img src="/post/2021/07/29/r-anova/index_files/figure-html/unnamed-chunk-20-1.svg" width="672" /></p>
+<pre><code>## df$species: AA
+## NULL
+## ------------------------------------------------------------ 
+## df$species: BB
+## NULL
+## ------------------------------------------------------------ 
+## df$species: CC
+## NULL
+## ------------------------------------------------------------ 
+## df$species: DD
+## NULL</code></pre>
+<p>以下仅以一个物种示例：</p>
+<pre class="r"><code># 方法三
+df_aa &lt;- subset(df, species == &quot;AA&quot;)
+
+library(HH)
+interaction2wt(biomass ~ drought*fertilizer, data = df_aa)</code></pre>
+<p><img src="/post/2021/07/29/r-anova/index_files/figure-html/unnamed-chunk-21-1.svg" width="672" /></p>
+<pre class="r"><code># 方法四
+library(agricolae)
+D_vs_F_aa &lt;- with(df_aa, interaction(drought, fertilizer, sep = &quot;:&quot;))
+aov_b2inter_aa &lt;- aov(biomass ~ D_vs_F_aa, data = df_aa)
+
+hsd_b2inter_aa &lt;- HSD.test(aov_b2inter_aa, &quot;D_vs_F_aa&quot;, 
+    group = TRUE, console = TRUE)</code></pre>
+<pre><code>## 
+## Study: aov_b2inter_aa ~ &quot;D_vs_F_aa&quot;
+## 
+## HSD Test for biomass 
+## 
+## Mean Square Error:  0.002231997 
+## 
+## D_vs_F_aa,  means
+## 
+##           biomass         std r       Min       Max
+## D25:CK  0.5839097 0.048838341 5 0.5304225 0.6378078
+## D25:NPK 0.4047879 0.097327361 5 0.2449982 0.4848997
+## D50:CK  0.7181144 0.010508648 5 0.7050056 0.7310787
+## D50:NPK 0.7773386 0.018954795 5 0.7581936 0.8029548
+## D75:CK  0.9249450 0.032402816 5 0.8896633 0.9608719
+## D75:NPK 0.8737076 0.003811308 5 0.8683986 0.8777716
+## 
+## Alpha: 0.05 ; DF Error: 24 
+## Critical Value of Studentized Range: 4.372651 
+## 
+## Minimun Significant Difference: 0.0923861 
+## 
+## Treatments with the same letter are not significantly different.
+## 
+##           biomass groups
+## D75:CK  0.9249450      a
+## D75:NPK 0.8737076      a
+## D50:NPK 0.7773386      b
+## D50:CK  0.7181144      b
+## D25:CK  0.5839097      c
+## D25:NPK 0.4047879      d</code></pre>
+<pre class="r"><code>bar.group(hsd_b2inter_aa$groups, 
+    ylim = c(0, 1.1),
+    # density = 6,
+    border = &quot;black&quot;)</code></pre>
+<p><img src="/post/2021/07/29/r-anova/index_files/figure-html/unnamed-chunk-22-1.svg" width="672" /></p>
+<pre class="r"><code># 方法五
+library(interactions)
+cat_plot(lrm_b2mix_sp$AA, pred = drought, modx = fertilizer, geom = &quot;line&quot;)</code></pre>
+<p><img src="/post/2021/07/29/r-anova/index_files/figure-html/unnamed-chunk-23-1.svg" width="672" /></p>
+<p>将多张图画在一起，还可以使用 <code>for</code> 循环，结合 <code>par(mfrow=c(), mar = c())</code> 等实现，使用 <code>par(new = TRUE)</code> 还可以叠加图层。这样做的另一个好处是，可以为不同的小图设定各自的样式，实现更灵活的自定义。</p>
+</div>
+<div id="多重比较" class="section level4">
+<h4>多重比较</h4>
+<ul>
+<li>LSD, Fisher’s LSD (Least Significant Difference) 最小显著差异法 （如果未使用经调整的 p 值，则不推荐）</li>
+<li>Tukey’s HSD, Tukey’s Honest Significant Difference （推荐）
+<ul>
+<li><code>HSD.test()</code></li>
+</ul></li>
+<li>Bonferroni （推荐）</li>
+<li>Dunn-Šidák (Šidák)</li>
+<li>Duncan’s LSR (least significant range)</li>
+<li>Duncan’s Multiple Range Test (DMRT) （不推荐）</li>
+<li>Duncan’s new multiple range test
+<ul>
+<li><code>duncan.test()</code></li>
+</ul></li>
+<li>SNK (Q 法), Student-Newman-Keuls （不推荐）
+<ul>
+<li><code>SNK.test()</code></li>
+</ul></li>
+<li>Scheffe (S 法), Scheffé’s S
+<ul>
+<li><code>scheffe.test()</code></li>
+</ul></li>
+</ul>
+<p>另参考：</p>
+<ul>
+<li>Lee S, Lee DK. What is the proper way to apply the multiple comparison test? Korean J Anesthesiol. 2008,71(5): 353–360. doi: <a href="https://dx.doi.org/10.4097%2Fkja.d.18.00242">10.4097/kja.d.18.00242</a></li>
+<li>Midway S, et al. Comparing multiple comparisons: practical guidance for choosing the best multiple comparisons test. PeerJ. 2020,8:e10387. doi: <a href="https://doi.org/10.7717/peerj.10387">10.7717/peerj.10387</a></li>
+</ul>
+<div id="物种内比较" class="section level5">
+<h5>物种内比较</h5>
+<p>多重比较：以 Tukey’s HSD 为例</p>
+<p>自定义函数下载地址：<a href="https://github.com/pftz/pftz/blob/master/content/post/2021-07-23-r-anova/fun_mulcomp_tukey.R" class="uri">https://github.com/pftz/pftz/blob/master/content/post/2021-07-23-r-anova/fun_mulcomp_tukey.R</a></p>
+<pre class="r"><code># HSD
+# 加载自定义的函数，用于双因素内所有水平的多重比较
+source(&#39;fun_mulcomp_tukey.R&#39;, encoding = &#39;UTF-8&#39;)
+
+# 干旱内施肥多重比较、施肥内干旱多重比较
+comp_hsd_b2in_DIY &lt;- by(df, df$species, 
+    function(d) fun_mulcomp_hsd2(
+        y = &quot;biomass&quot;, 
+        data = d, 
+        trts = c(&quot;drought&quot;, &quot;fertilizer&quot;)))
+
+# 干旱内施肥的比较结果
+comp_hsd_b2in_dry &lt;- fun_mulcomp_res(
+    comp_hsd_b2in_DIY,
+    treats = &quot;drought&quot;,
+    groups = &quot;species&quot;)
+
+# 施肥内干旱的比较结果
+comp_hsd_b2in_fert &lt;- fun_mulcomp_res(
+    comp_hsd_b2in_DIY,
+    treats = &quot;fertilizer&quot;,
+    groups = &quot;species&quot;)</code></pre>
+<pre class="r"><code># library(ggplot2)
+# 箱线图
+pbox_comp_biomass &lt;- ggplot(data = df, aes(x = drought, y = biomass)) +
+    geom_boxplot(aes(fill = fertilizer)) +
+    theme_bw() + 
+    theme(panel.grid.minor = element_blank()) +
+    facet_wrap(~species, scale=&quot;free&quot;)
+
+# 方式一（字母版）
+pbox_comp_biomass + 
+    geom_text(
+        data = comp_hsd_b2in_dry,
+        aes(x = iGroup, y = biomass + std + 0.15, 
+            label = groups, group = treat), 
+        position = position_dodge(width = 0.9))</code></pre>
+<p><img src="/post/2021/07/29/r-anova/index_files/figure-html/unnamed-chunk-25-1.svg" width="672" /></p>
+<pre class="r"><code># 方式二（星号版）
+library(ggpubr)
+pbox_comp_biomass + 
+    ylim(0.2, 1.3) +
+    stat_compare_means(
+        aes(group = fertilizer),
+        method = &quot;anova&quot;,
+        # method = &quot;t.test&quot;,
+        # paired = TRUE,
+        label = &quot;p.signif&quot;,
+        symnum.args = list(cutpoints = c(0, 0.001, 0.01, 0.05, 1), 
+                           symbols = c(&quot;***&quot;, &quot;**&quot;, &quot;*&quot;, &quot;ns&quot;)),
+        label.y = 1.2)</code></pre>
+<p><img src="/post/2021/07/29/r-anova/index_files/figure-html/unnamed-chunk-25-2.svg" width="672" /></p>
+<pre class="r"><code># 条形图
+# (1) 基本图
+pbar_comp_biomass &lt;- 
+    ggplot(data = comp_hsd_b2in_dry, 
+        aes(x = iGroup, y = biomass, fill = treat)) +
+    xlab(&quot;Drought&quot;) +
+    ylab(&quot;Biomass&quot;) +
+    geom_bar(position=&quot;dodge&quot;, stat = &quot;identity&quot;, color = &quot;black&quot;) +
+    facet_wrap(~species, scale=&quot;free&quot;) +
+    geom_errorbar(
+        aes(ymin = biomass, ymax = biomass + std),
+        width=.2,
+        position = position_dodge(.9)) +
+    scale_fill_manual(values = c(&quot;grey&quot;, &quot;black&quot;)) +
+    theme_bw() +
+    theme(panel.grid = element_blank())
+    # geom_text(
+    #     aes(x = iGroup, y = biomass + std + 0.15, 
+    #         label = groups, group = treat), 
+    #     position = position_dodge(width = 0.9))
+
+# (2.1) 方法一：字母 + 星号
+# library(ggpubr)
+
+comp_hsd_b2in_fert$groups2 &lt;- with(comp_hsd_b2in_fert, ifelse(
+    iGroup == &quot;CK&quot;,
+    as.character(toupper(groups)),
+    as.character(groups)))
+
+pbar_comp_biomass +
+    geom_text(
+        data = comp_hsd_b2in_fert,
+        aes(x = treat, y = biomass + std + 0.15,
+            label = groups2, group = iGroup),
+        position = position_dodge(0.9),
+        inherit.aes = FALSE,
+        show.legend = FALSE) +
+        ylim(0, 1.5) +
+    stat_compare_means(
+        data = df, aes(x = drought, y = biomass, group = fertilizer),
+        # comparisons = list(c(&quot;CK&quot;, &quot;NPK&quot;)),
+        method = &quot;anova&quot;,
+        label = &quot;p.signif&quot;,
+        symnum.args = list(cutpoints = c(0, 0.001, 0.01, 0.05, 1), 
+                           symbols = c(&quot;***&quot;, &quot;**&quot;, &quot;*&quot;, &quot;ns&quot;)),
+        label.y = 1.4,
+        inherit.aes = FALSE,
+        show.legend = FALSE)</code></pre>
+<p><img src="/post/2021/07/29/r-anova/index_files/figure-html/unnamed-chunk-26-1.svg" width="672" /></p>
+<pre class="r"><code># (2.2) 方法二：大、小写字母
+comp_hsd_b2in_2f &lt;- base::merge(
+    comp_hsd_b2in_dry,
+    comp_hsd_b2in_fert, 
+    by.x = c(&quot;species&quot;, &quot;biomass&quot;, &quot;std&quot;, &quot;iGroup&quot;, &quot;treat&quot;),
+    by.y = c(&quot;species&quot;, &quot;biomass&quot;, &quot;std&quot;, &quot;treat&quot;, &quot;iGroup&quot;),
+    all = TRUE,
+    sort = FALSE)
+
+comp_hsd_b2in_2f$groups &lt;- paste0(
+    toupper(comp_hsd_b2in_2f$groups.x),
+    comp_hsd_b2in_2f$groups.y)
+
+pbar_comp_biomass + 
+    geom_text(
+        data = comp_hsd_b2in_2f,
+        aes(x = iGroup, y = biomass + std + 0.15,
+            label = groups, group = treat),
+        position = position_dodge(width = 0.9),
+        inherit.aes = FALSE,
+        show.legend = FALSE)</code></pre>
+<p><img src="/post/2021/07/29/r-anova/index_files/figure-html/unnamed-chunk-26-2.svg" width="672" /></p>
+<p>使用其它 R 函数：</p>
+<p>Estimated marginal means (EMMs) 估计的边际平均值</p>
+<blockquote>
+<p>Estimated marginal means (EMMs) are defined as equally weighted means of these predictions at specified margins</p>
+</blockquote>
+<pre class="r"><code># 分组成对比较
+
+library(emmeans)
+# library(lsmeans)
+
+# Tukey-adjusted P value
+# (1) Within group comparisons
+comp_emm_b2in_within &lt;- lapply(
+    lrm_b2mix_sp, 
+    function(m) emmeans(m,  ~ drought | fertilizer))
+
+comp_emm_b2in_pairs &lt;- lapply(comp_emm_b2in_within, pairs)
+
+# Pairwise P-value plots
+# pwpp(comp_emm_b2in_within$AA)
+
+emmip(comp_emm_b2in_within$AA, ~ drought | fertilizer, CIs = TRUE)</code></pre>
+<p><img src="/post/2021/07/29/r-anova/index_files/figure-html/unnamed-chunk-27-1.svg" width="672" /></p>
+<pre class="r"><code>plot(comp_emm_b2in_within$AA, by = &quot;fertilizer&quot;, comparisons = TRUE)</code></pre>
+<p><img src="/post/2021/07/29/r-anova/index_files/figure-html/unnamed-chunk-27-2.svg" width="672" /></p>
+<pre class="r"><code># (2) All pairwise comparisons
+comp_emm_b2in_pairwise &lt;- lapply(
+    lrm_b2mix_sp, 
+    function(m) emmeans(m, pairwise ~ drought:fertilizer))</code></pre>
+<p>另参考：</p>
+<ul>
+<li><a href="https://cran.r-project.org/web/packages/emmeans/vignettes/basics.html">Basics of estimated marginal means</a></li>
+<li><a href="https://cran.r-project.org/web/packages/emmeans/vignettes/comparisons.html">Comparisons and contrasts in emmeans</a></li>
+<li><a href="https://aosmith.rbind.io/2019/03/25/getting-started-with-emmeans/">Getting started with emmeans</a></li>
+</ul>
+<pre class="r"><code># 仅以一个物种、一个处理示例
+
+# Tukey
+# 方法一
+# detach(&quot;package:HH&quot;, unload = TRUE)
+
+comp_tukey_b1dry_hsd &lt;- TukeyHSD(aov_b1dry)
+
+par(mar = c(5, 5, 3, 1), las = 1)
+plot(comp_tukey_b1dry_hsd)</code></pre>
+<p><img src="/post/2021/07/29/r-anova/index_files/figure-html/unnamed-chunk-28-1.svg" width="672" /></p>
+<pre class="r"><code># 方法二：功能更强大
+library(multcomp)
+comp_tukey_b1dry_glht &lt;- glht(
+    aov_b1dry, 
+    linfct = mcp(drought = &quot;Tukey&quot;))
+
+# 简单版结果
+summary(comp_tukey_b1dry_glht)</code></pre>
+<pre><code>## 
+##   Simultaneous Tests for General Linear Hypotheses
+## 
+## Multiple Comparisons of Means: Tukey Contrasts
+## 
+## 
+## Fit: aov(formula = biomass ~ drought, data = df_aa_npk)
+## 
+## Linear Hypotheses:
+##                Estimate Std. Error t value Pr(&gt;|t|)    
+## D50 - D25 == 0  0.37255    0.03623   10.28   &lt;0.001 ***
+## D75 - D25 == 0  0.46892    0.03623   12.94   &lt;0.001 ***
+## D75 - D50 == 0  0.09637    0.03623    2.66   0.0509 .  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## (Adjusted p values reported -- single-step method)</code></pre>
+<pre class="r"><code># 字母版结果
+tkcld_b1dry &lt;- cld(comp_tukey_b1dry_glht, level = 0.05)
+
+par(mai=c(1,1,1.5,1))
+plot(tkcld_b1dry, col = &quot;lightgrey&quot;)</code></pre>
+<p><img src="/post/2021/07/29/r-anova/index_files/figure-html/unnamed-chunk-28-2.svg" width="672" /></p>
+</div>
+<div id="物种间比较" class="section level5">
+<h5>物种间比较</h5>
+<p>多重比较：以 Tukey’s HSD 为例</p>
+<pre class="r"><code># 以施肥作为分组
+
+# 物种内干旱多重比较、干旱内物种多重比较
+comp_hsd_b2fert_DIY &lt;- by(df, df$fertilizer, 
+    function(d) fun_mulcomp_hsd2(
+        y = &quot;biomass&quot;, 
+        data = d, 
+        trts = c(&quot;species&quot;, &quot;drought&quot;)))
+
+# 干旱内物种的比较结果
+comp_hsd_b2fert_spp &lt;- fun_mulcomp_res(
+    comp_hsd_b2fert_DIY,
+    treats = &quot;drought&quot;,
+    groups = &quot;fertilizer&quot;)
+
+# 干旱内物种直接比差异
+comp_hsd_b2fert_sp_DIY &lt;- by(df, df$fertilizer, 
+    function(d) fun_mulcomp_hsd(
+        biomass ~ species,
+        data = d))
+
+comp_hsd_b2fert_sp_spp &lt;- fun_mulcomp_res(
+    comp_hsd_b2fert_sp_DIY,
+    groups = &quot;fertilizer&quot;)</code></pre>
+<pre class="r"><code>pbar_comp_biomass_spp &lt;- 
+    ggplot(data = comp_hsd_b2fert_spp, 
+        aes(x = treat, y = biomass, fill = iGroup)) +
+    xlab(&quot;Drought&quot;) +
+    ylab(&quot;Biomass&quot;) +
+    geom_bar(position=&quot;dodge&quot;, stat = &quot;identity&quot;, color = &quot;black&quot;) +
+    facet_wrap(~fertilizer, scale=&quot;free&quot;) +
+    geom_errorbar(
+        aes(ymin = biomass, ymax = biomass + std),
+        width=.2,
+        position = position_dodge(.9)) +
+    scale_fill_manual(values = c(&quot;white&quot;, &quot;grey&quot;, &quot;black&quot;)) +
+    theme_bw() +
+    theme(panel.grid = element_blank())
+
+# library(ggpubr)
+comp_hsd_b2fert_spp$groups2 &lt;- with(comp_hsd_b2fert_spp, ifelse(
+    iGroup == &quot;D50&quot;,
+    as.character(toupper(groups)),
+    as.character(groups)))
+
+# 添加字母：物种间干旱比较
+pbar_comp_biomass_spp2 &lt;- pbar_comp_biomass_spp +
+    geom_text(
+        data = comp_hsd_b2fert_spp,
+        aes(x = treat, y = biomass + std + 0.06,
+            label = groups2, group = iGroup),
+        position = position_dodge(0.9),
+        inherit.aes = FALSE,
+        show.legend = FALSE) +
+        ylim(0, 1.35)
+
+# 添加字母：物种直接比较
+# detach(&quot;package:ggpubr&quot;, unload = TRUE)
+library(ggsignif)
+
+pbar_comp_biomass_spp2 +
+    geom_signif(
+      stat=&quot;identity&quot;,
+      data = comp_hsd_b2fert_sp_spp,
+      aes(x = as.numeric(treat) - 0.4, y = 1.29, 
+          xend = as.numeric(treat) + 0.4,
+          yend = 1.29,
+          annotation = groups,
+          group = treat),
+      inherit.aes = FALSE)</code></pre>
+<p><img src="/post/2021/07/29/r-anova/index_files/figure-html/unnamed-chunk-30-1.svg" width="672" /></p>
+</div>
+</div>
+<div id="假设检验" class="section level4">
+<h4>假设检验</h4>
+<p>对于所有因素（分类处理变量）的每一水平的处理组合，即所有因素水平的每一个配对下，假设观测值（响应变量 y）的概率分布：</p>
+<ol style="list-style-type: decimal">
+<li>近似正态分布；</li>
+<li>方差恒定且相等。</li>
+</ol>
+<blockquote>
+<ol style="list-style-type: decimal">
+<li>The population probability distribution of the observations for any factor–level combination is approximately normal.</li>
+<li>The variance of the probability distribution is constant and the same for all factor–level combinations.</li>
+</ol>
+</blockquote>
+<blockquote>
+<p>如果因素水平的每一个配对下的数据量都足够大的话，建议对每一个子总体的正态性和同方差性都做一个验证。
+当假设明显不满足时，考虑数据变换或非参数方法。</p>
+</blockquote>
+<p>另可参看维基百科：<a href="https://en.wikipedia.org/wiki/Analysis_of_variance#Assumptions" class="uri">https://en.wikipedia.org/wiki/Analysis_of_variance#Assumptions</a></p>
+<p>假设检验方法：</p>
+<ol style="list-style-type: decimal">
+<li>检验（每个处理组合响应变量 y 或线性模型的残差的）正态性
+<ul>
+<li>Q-Q 图</li>
+<li>Shapiro–Wilk test，如样本量 &lt; 2000 时</li>
+<li>Anderson–Darling test</li>
+<li>Kolmogorov–Smirnov test，如样本量 &gt; 2000 时</li>
+</ul></li>
+<li>检验方差齐性
+<ul>
+<li>Bartlett test</li>
+<li>Fligner-Killeen test</li>
+<li>Brown-Forsythe test</li>
+<li>Levene’s test</li>
+</ul></li>
+</ol>
+<pre class="r"><code># 残差分析
+par(mfrow = c(2, 2))
+plot(lrm_b2mix_sp$AA)</code></pre>
+<p><img src="/post/2021/07/29/r-anova/index_files/figure-html/unnamed-chunk-31-1.svg" width="672" /></p>
+<pre class="r"><code># 使用隐式循环批量作图
+par(mfrow = c(4, 4))
+lapply(lrm_b2mix_sp, plot)</code></pre>
+<p><img src="/post/2021/07/29/r-anova/index_files/figure-html/unnamed-chunk-31-2.svg" width="672" /></p>
+<pre><code>## $AA
+## NULL
+## 
+## $BB
+## NULL
+## 
+## $CC
+## NULL
+## 
+## $DD
+## NULL</code></pre>
+<pre class="r"><code># 实际值（观测值）与拟合值（预测值）
+par(mfrow=c(1,1))
+plot(lrm_b2mix_sp$AA$fitted.values ~ lrm_b2mix_sp$AA$model$biomass)</code></pre>
+<p><img src="/post/2021/07/29/r-anova/index_files/figure-html/unnamed-chunk-32-1.svg" width="672" /></p>
+<pre class="r"><code># Q-Q 图
+qqplot()
+
+# library(car)
+qqPlot(lrm_b2mix_sp$AA$residuals, main = &quot;QQ Plot&quot;)
+
+lapply(lrm_b2mix_sp, function(x) shapiro.test(resid(x)))</code></pre>
+<pre class="r"><code># 方差齐性
+with(df, by(df, species, function(d) bartlett.test(biomass ~ interaction(drought, fertilizer), d)))
+
+# library(car)
+# &#39;levene.test()&#39; is defunct.
+with(df, by(df, species, function(d) leveneTest(biomass ~ drought*fertilizer, d)))
+
+fligner.test()
+
+HH::hov()</code></pre>
+<pre class="r"><code># 离群点/异常值
+car::outlierTest(lrm_b2mix_sp$AA)</code></pre>
+<pre><code>##    rstudent unadjusted p-value Bonferroni p
+## 61 -5.82263         6.2157e-06   0.00018647</code></pre>
+<hr />
+</div>
+</div>
+</div>
+<div id="待办" class="section level2">
+<h2>待办</h2>
+<ul>
+<li>增补/删减内容，使其更完整且专注既定主题</li>
+<li>添加方法的利弊比较，以及用于选择的经验法则</li>
+<li>增加多个因变量的分析，以及为不同因变量进行批量分析的 R 实现</li>
+<li>提取主线，单独打包成自定义函数</li>
+<li>优化作图，更符合出版格式</li>
+</ul>
+</div>
+<div id="贡献" class="section level2">
+<h2>贡献</h2>
+<ul>
+<li>在本页面下方（Issues）评论/提问/回答</li>
+<li>修改或补充内容，包括 R 语句、错别字等，可提交 pull request</li>
+</ul>
+</div>
+<div id="参考" class="section level2">
+<h2>参考</h2>
+<ul>
+<li>R语言实战 R in Action</li>
+<li>赖江山 R 课, 广州, 2018.</li>
+<li>de Micheaux PL, et al. 潘东东, 等译. R 软件教程与统计分析：入门到精通. 2015. 北京：高等教育出版社.</li>
+<li>William M. Mendenhall, Terry L. Sincich, Nancy S. Boudreau. 2017. <em>Statistics for engineering and the sciences</em>. Chapman and Hall, CRC.</li>
+<li><a href="https://stats.idre.ucla.edu/other/dae/">UCLA: Data analysis examples</a></li>
+<li><a href="https://daviddalpiaz.github.io/appliedstats/analysis-of-variance.html#two-way-anova"><em>Applied Statistics with R</em>: Chapter 12 Analysis of Variance</a></li>
+<li><a href="https://www.scribbr.com/statistics/anova-in-r/">ANOVA in R: A step-by-step guide</a></li>
+</ul>
+</div>
+
+</div>
+</main>
+
+<section class="appendix">
+
+
+<div>
+  <div class="side side-left"><h3>欢迎修订</h3></div>
+  
+  
+  
+    
+  
+  如果您发现本文里含有任何错误（包括错别字和标点符号），欢迎<a href="https://github.com/pftz/pftz/edit/master/content/post/2021-07-23-r-anova/index.Rmd" id="edit-link">在本站的 GitHub 项目里提交修订意见。</a>
+</div>
+
+
+
+<div>
+  <div class="side side-left"><h3>欢迎留言</h3></div>
+  <script src="https://utteranc.es/client.js"
+      repo="pftz/pftz"
+      issue-term="pathname"
+      label="comment"
+      theme="github-light"
+      crossorigin="anonymous"
+      async>
+  </script>
+</div>
+</section>
+
+
+
+<nav class="post-nav">
+  <span class="nav-next"></span>
+  &hercon;
+  <span class="nav-prev"></span>
+</nav>
+
+
+
+
+
+</div>
+
+
+  <footer>
+  <script async src="//yihui.org/js/center-img.js"></script>
+
+
+
+<script src="//yihui.org/js/math-code.js"></script>
+<script async src="//mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>
+hljs.configure({languages: []});
+hljs.initHighlightingOnLoad();
+</script>
+
+
+  <div class="footer">
+  
+  <ul class="copyright">
+    <li>© PFTZ (2021 - 2021)</li>
+  </ul>
+  
+  <ul>
+    
+    <li>
+      <a href="/about/">关于</a>
+    </li>
+    
+    <li class="optional">
+      <a href="/categories/">分类</a>
+    </li>
+    
+    <li class="optional">
+      <a href="/tags/">标签</a>
+    </li>
+    
+    <li id="menu-edit">
+      <a href="#">编辑</a>
+    </li>
+    
+    <li>
+      <a href="#">顶部</a>
+    </li>
+    
+  </ul>
+  </div>
+  
+  </footer>
+  <script async src="/js/features.js" data-page-features="[[&#34;&#43;toc&#34;,&#34;&#43;number_sections&#34;,&#34;&#43;sidenotes&#34;],[&#34;&#43;sidenotes&#34;],&#34;目录&#34;]"></script>
+  </body>
+</html>
+

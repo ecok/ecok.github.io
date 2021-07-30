@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>R on 有油</title>
+    <link>/categories/r/</link>
+    <description>Recent content in R on 有油</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Thu, 29 Jul 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/r/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>R 方差分析：以多物种、双因素为例</title>
+      <link>/post/2021/07/29/r-anova/</link>
+      <pubDate>Thu, 29 Jul 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2021/07/29/r-anova/</guid>
+      <description>警示：水平有限，以下内容均有可能存在错漏！
+如有发现，请下方留言或提交 pull request，感谢您的贡献！
+ 仅供参考的示例； 没有通用的模板。 了解统计更重要； 照搬后果请自负。
+ 本分析以多物种、双因素为例，展示常用的方差分析的 R 实现。当然，通过少量的调整，也可以向下兼容：单物种、单因素；也可能向上兼容：三因素至多因素。例如，“三因素”可假想成“双因素中的一个因素再包含一双因素”，一些双因素的函数通过自我函数嵌套，可实现扩展。
+一个分析需求，常常对应着多种 R 实现，本示例列举了常用的几种。有些采用 R 中常用的批量（如循环、重复、分组等）计算方式，尽可能地避免使用大量重复代码；有些方法为了篇幅的简洁，仅以局部单一情况做演示，但是它们都可以用类似的方式实现批量计算，参照上下文自行调整即可。
+本示例原文档下载地址：https://github.com/pftz/pftz/blob/master/content/post/2021-07-23-r-anova/index.Rmd
+示例数据  x，自变量，解释变量，预测变量，独立变量，IV (Independent variables) y，因变量，响应变量，结果变量，依赖变量，DV (Dependent variables)  构建示例用数据  # 构建一个伪造的示例数据框 set.seed(110) df &amp;lt;- data.frame( drought = rep(c(&amp;quot;D25&amp;quot;, &amp;quot;D50&amp;quot;, &amp;quot;D75&amp;quot;), each = 20, times = 2), fertilizer = rep(c(&amp;quot;CK&amp;quot;, &amp;quot;NPK&amp;quot;), each = 60), species = rep(c(&amp;quot;AA&amp;quot;, &amp;quot;BB&amp;quot;, &amp;quot;CC&amp;quot;, &amp;quot;DD&amp;quot;), each = 5, times = 6), biomass = sort(rnorm(120, mean = 0.</description>
+    </item>
+    
+  </channel>
+</rss>
