@@ -19,6 +19,7 @@ fun_mulcomp_hsd <- function(formula, data, ...){
     #     p.adj = "bonferroni",
     #     ...)
     
+    # 平均值 + 标准差
     res <- merge(cbind(treat = rownames(hsd$mean),
                        hsd$mean),
                  cbind(treat = rownames(hsd$groups),

@@ -6,13 +6,13 @@
     <description>Recent content in R on 有油</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Thu, 29 Jul 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/r/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 31 Jul 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/r/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>R 方差分析：以多物种、双因素为例</title>
-      <link>/post/2021/07/29/r-anova/</link>
-      <pubDate>Thu, 29 Jul 2021 00:00:00 +0000</pubDate>
+      <link>/post/2021/07/31/r-anova/</link>
+      <pubDate>Sat, 31 Jul 2021 00:00:00 +0000</pubDate>
       
-      <guid>/post/2021/07/29/r-anova/</guid>
+      <guid>/post/2021/07/31/r-anova/</guid>
       <description>警示：水平有限，以下内容均有可能存在错漏！
 如有发现，请下方留言或提交 pull request，感谢您的贡献！
  仅供参考的示例； 没有通用的模板。 了解统计更重要； 照搬后果请自负。

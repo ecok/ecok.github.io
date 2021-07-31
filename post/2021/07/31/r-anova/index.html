@@ -32,7 +32,7 @@
       </li>
       
       <li>
-        <a href="/archieve/">归档</a>
+        <a href="/archives/">归档</a>
       </li>
       
       <li id="menu-search">
@@ -57,7 +57,7 @@
 sanchufy
 </h3>
 
-<h3 class="date">2021-07-29</h3>
+<h3 class="date">2021-07-31</h3>
 <p class="terms">
   
   
@@ -153,7 +153,12 @@ summary(df)</code></pre>
 # ----------
 # 箱线图
 boxplot(biomass ~ drought + fertilizer, data = df)</code></pre>
-<p><img src="/post/2021/07/29/r-anova/index_files/figure-html/unnamed-chunk-3-1.svg" width="672" /></p>
+<div class="figure"><span id="fig:boxplot-two-factors"></span>
+<img src="/post/2021/07/31/r-anova/index_files/figure-html/boxplot-two-factors-1.svg" alt="双因素非交互箱线图" width="672" />
+<p class="caption">
+Figure 1: 双因素非交互箱线图
+</p>
+</div>
 <pre class="r"><code># 以物种进行分组
 # --------------
 library(lattice)
@@ -162,31 +167,52 @@ xyplot(biomass ~ drought | fertilizer,
        groups = species, data = df, 
        type=&#39;b&#39;, auto.key = list(columns = 4),
        scales=list(alternating=FALSE))</code></pre>
-<p><img src="/post/2021/07/29/r-anova/index_files/figure-html/unnamed-chunk-4-1.svg" width="672" /></p>
+<div class="figure"><span id="fig:descriptive-statistics-1"></span>
+<img src="/post/2021/07/31/r-anova/index_files/figure-html/descriptive-statistics-1.svg" alt="描述性统计" width="672" />
+<p class="caption">
+Figure 2: 描述性统计
+</p>
+</div>
 <pre class="r"><code># 直方图
 library(ggplot2)
 ggplot(df, aes(x = biomass)) + 
     geom_histogram(bins = 30) + 
     facet_wrap(~ species, ncol = 2) + 
     theme_bw()</code></pre>
-<p><img src="/post/2021/07/29/r-anova/index_files/figure-html/unnamed-chunk-4-2.svg" width="672" /></p>
+<div class="figure"><span id="fig:descriptive-statistics-2"></span>
+<img src="/post/2021/07/31/r-anova/index_files/figure-html/descriptive-statistics-2.svg" alt="描述性统计" width="672" />
+<p class="caption">
+Figure 3: 描述性统计
+</p>
+</div>
 <pre class="r"><code># 箱线图
 ggplot(df, aes(x = drought, y = biomass, 
                fill = fertilizer)) +
     geom_boxplot() +
     facet_wrap(~species, scale=&quot;free&quot;)</code></pre>
-<p><img src="/post/2021/07/29/r-anova/index_files/figure-html/unnamed-chunk-4-3.svg" width="672" /></p>
+<div class="figure"><span id="fig:descriptive-statistics-3"></span>
+<img src="/post/2021/07/31/r-anova/index_files/figure-html/descriptive-statistics-3.svg" alt="描述性统计" width="672" />
+<p class="caption">
+Figure 4: 描述性统计
+</p>
+</div>
 <pre class="r"><code># 条形图/柱状图
 # -------------
-# 计算平均值和标准误
+# 计算平均值、标准差和标准误
 bygroup_mean &lt;- aggregate(
     cbind(biomass, height) ~ drought + fertilizer + species, df,
-    function(x) cbind(mean(x), sd(x)))
+    function(x) cbind(mean(x), sd(x), sqrt(var(x)/length(x))))
 bygroup_mean &lt;- do.call(data.frame, bygroup_mean)
-names(bygroup_mean) &lt;- gsub(&quot;.1&quot;, &quot;&quot;, 
-    names(bygroup_mean), fixed = T)
-names(bygroup_mean) &lt;- gsub(&quot;.2&quot;, &quot;_sd&quot;,
-    names(bygroup_mean), fixed = T)
+
+# names(bygroup_mean) &lt;- gsub(&quot;.1&quot;, &quot;&quot;, 
+#     names(bygroup_mean), fixed = T)
+# names(bygroup_mean) &lt;- gsub(&quot;.2&quot;, &quot;_sd&quot;,
+#     names(bygroup_mean), fixed = T)
+library(stringr)
+colnames(bygroup_mean) &lt;- stringr::str_replace_all(
+    colnames(bygroup_mean),
+    c(&quot;.1&quot;, &quot;.2&quot;, &quot;.3&quot;),
+    c(&quot;&quot;, &quot;_sd&quot;, &quot;_se&quot;))
 
 # 分面作图
 ggplot(bygroup_mean, aes(x = drought, y = biomass, 
@@ -197,7 +223,12 @@ ggplot(bygroup_mean, aes(x = drought, y = biomass,
                   width=.2,
                  position=position_dodge(.9)) +
     facet_wrap(~species, scale=&quot;free&quot;)</code></pre>
-<p><img src="/post/2021/07/29/r-anova/index_files/figure-html/unnamed-chunk-4-4.svg" width="672" /></p>
+<div class="figure"><span id="fig:descriptive-statistics-4"></span>
+<img src="/post/2021/07/31/r-anova/index_files/figure-html/descriptive-statistics-4.svg" alt="描述性统计" width="672" />
+<p class="caption">
+Figure 5: 描述性统计
+</p>
+</div>
 </div>
 <div id="方差分析" class="section level2">
 <h2>方差分析</h2>
@@ -807,7 +838,12 @@ with(df, by(df, species, function (d){
         col = c(&quot;red&quot;, &quot;blue&quot;),
         pch = c(1, 16),
         main = &quot;Interaction between drought and fertilizer&quot;))}))</code></pre>
-<p><img src="/post/2021/07/29/r-anova/index_files/figure-html/unnamed-chunk-19-1.svg" width="672" /></p>
+<div class="figure"><span id="fig:interaction-added"></span>
+<img src="/post/2021/07/31/r-anova/index_files/figure-html/interaction-added-1.svg" alt="叠加处理交互作用" width="672" />
+<p class="caption">
+Figure 6: 叠加处理交互作用
+</p>
+</div>
 <pre><code>## species: AA
 ## NULL
 ## ------------------------------------------------------------ 
@@ -830,7 +866,12 @@ by(df, df$species, function (d){
     col = c(&quot;red&quot;, &quot;blue&quot;),
     main = &quot;Interaction Plot with 95% CIs&quot;,
     xlab = &quot;drought:Fertilizer&quot;)})</code></pre>
-<p><img src="/post/2021/07/29/r-anova/index_files/figure-html/unnamed-chunk-20-1.svg" width="672" /></p>
+<div class="figure"><span id="fig:interaction-pairs"></span>
+<img src="/post/2021/07/31/r-anova/index_files/figure-html/interaction-pairs-1.svg" alt="配对处理交互作用" width="672" />
+<p class="caption">
+Figure 7: 配对处理交互作用
+</p>
+</div>
 <pre><code>## df$species: AA
 ## NULL
 ## ------------------------------------------------------------ 
@@ -848,7 +889,12 @@ df_aa &lt;- subset(df, species == &quot;AA&quot;)
 
 library(HH)
 interaction2wt(biomass ~ drought*fertilizer, data = df_aa)</code></pre>
-<p><img src="/post/2021/07/29/r-anova/index_files/figure-html/unnamed-chunk-21-1.svg" width="672" /></p>
+<div class="figure"><span id="fig:interaction-2-way"></span>
+<img src="/post/2021/07/31/r-anova/index_files/figure-html/interaction-2-way-1.svg" alt="主效应和交互作用" width="672" />
+<p class="caption">
+Figure 8: 主效应和交互作用
+</p>
+</div>
 <pre class="r"><code># 方法四
 library(agricolae)
 D_vs_F_aa &lt;- with(df_aa, interaction(drought, fertilizer, sep = &quot;:&quot;))
@@ -891,11 +937,21 @@ hsd_b2inter_aa &lt;- HSD.test(aov_b2inter_aa, &quot;D_vs_F_aa&quot;,
     ylim = c(0, 1.1),
     # density = 6,
     border = &quot;black&quot;)</code></pre>
-<p><img src="/post/2021/07/29/r-anova/index_files/figure-html/unnamed-chunk-22-1.svg" width="672" /></p>
+<div class="figure"><span id="fig:interaction-pairs-comparison"></span>
+<img src="/post/2021/07/31/r-anova/index_files/figure-html/interaction-pairs-comparison-1.svg" alt="配对交互作用比较" width="672" />
+<p class="caption">
+Figure 9: 配对交互作用比较
+</p>
+</div>
 <pre class="r"><code># 方法五
 library(interactions)
 cat_plot(lrm_b2mix_sp$AA, pred = drought, modx = fertilizer, geom = &quot;line&quot;)</code></pre>
-<p><img src="/post/2021/07/29/r-anova/index_files/figure-html/unnamed-chunk-23-1.svg" width="672" /></p>
+<div class="figure"><span id="fig:interaction-single"></span>
+<img src="/post/2021/07/31/r-anova/index_files/figure-html/interaction-single-1.svg" alt="单物种交互作用" width="672" />
+<p class="caption">
+Figure 10: 单物种交互作用
+</p>
+</div>
 <p>将多张图画在一起，还可以使用 <code>for</code> 循环，结合 <code>par(mfrow=c(), mar = c())</code> 等实现，使用 <code>par(new = TRUE)</code> 还可以叠加图层。这样做的另一个好处是，可以为不同的小图设定各自的样式，实现更灵活的自定义。</p>
 </div>
 <div id="多重比较" class="section level4">
@@ -969,7 +1025,12 @@ pbox_comp_biomass +
         aes(x = iGroup, y = biomass + std + 0.15, 
             label = groups, group = treat), 
         position = position_dodge(width = 0.9))</code></pre>
-<p><img src="/post/2021/07/29/r-anova/index_files/figure-html/unnamed-chunk-25-1.svg" width="672" /></p>
+<div class="figure"><span id="fig:boxplot-multiple-comparison-within-group-1"></span>
+<img src="/post/2021/07/31/r-anova/index_files/figure-html/boxplot-multiple-comparison-within-group-1.svg" alt="组内多重比较箱线图" width="672" />
+<p class="caption">
+Figure 11: 组内多重比较箱线图
+</p>
+</div>
 <pre class="r"><code># 方式二（星号版）
 library(ggpubr)
 pbox_comp_biomass + 
@@ -983,7 +1044,12 @@ pbox_comp_biomass +
         symnum.args = list(cutpoints = c(0, 0.001, 0.01, 0.05, 1), 
                            symbols = c(&quot;***&quot;, &quot;**&quot;, &quot;*&quot;, &quot;ns&quot;)),
         label.y = 1.2)</code></pre>
-<p><img src="/post/2021/07/29/r-anova/index_files/figure-html/unnamed-chunk-25-2.svg" width="672" /></p>
+<div class="figure"><span id="fig:boxplot-multiple-comparison-within-group-2"></span>
+<img src="/post/2021/07/31/r-anova/index_files/figure-html/boxplot-multiple-comparison-within-group-2.svg" alt="组内多重比较箱线图" width="672" />
+<p class="caption">
+Figure 12: 组内多重比较箱线图
+</p>
+</div>
 <pre class="r"><code># 条形图
 # (1) 基本图
 pbar_comp_biomass &lt;- 
@@ -993,6 +1059,7 @@ pbar_comp_biomass &lt;-
     ylab(&quot;Biomass&quot;) +
     geom_bar(position=&quot;dodge&quot;, stat = &quot;identity&quot;, color = &quot;black&quot;) +
     facet_wrap(~species, scale=&quot;free&quot;) +
+    # 标准差
     geom_errorbar(
         aes(ymin = biomass, ymax = biomass + std),
         width=.2,
@@ -1032,7 +1099,12 @@ pbar_comp_biomass +
         label.y = 1.4,
         inherit.aes = FALSE,
         show.legend = FALSE)</code></pre>
-<p><img src="/post/2021/07/29/r-anova/index_files/figure-html/unnamed-chunk-26-1.svg" width="672" /></p>
+<div class="figure"><span id="fig:bar-multiple-comparison-within-group-1"></span>
+<img src="/post/2021/07/31/r-anova/index_files/figure-html/bar-multiple-comparison-within-group-1.svg" alt="组内多重比较柱状图" width="672" />
+<p class="caption">
+Figure 13: 组内多重比较柱状图
+</p>
+</div>
 <pre class="r"><code># (2.2) 方法二：大、小写字母
 comp_hsd_b2in_2f &lt;- base::merge(
     comp_hsd_b2in_dry,
@@ -1054,7 +1126,12 @@ pbar_comp_biomass +
         position = position_dodge(width = 0.9),
         inherit.aes = FALSE,
         show.legend = FALSE)</code></pre>
-<p><img src="/post/2021/07/29/r-anova/index_files/figure-html/unnamed-chunk-26-2.svg" width="672" /></p>
+<div class="figure"><span id="fig:bar-multiple-comparison-within-group-2"></span>
+<img src="/post/2021/07/31/r-anova/index_files/figure-html/bar-multiple-comparison-within-group-2.svg" alt="组内多重比较柱状图" width="672" />
+<p class="caption">
+Figure 14: 组内多重比较柱状图
+</p>
+</div>
 <p>使用其它 R 函数：</p>
 <p>Estimated marginal means (EMMs) 估计的边际平均值</p>
 <blockquote>
@@ -1077,9 +1154,19 @@ comp_emm_b2in_pairs &lt;- lapply(comp_emm_b2in_within, pairs)
 # pwpp(comp_emm_b2in_within$AA)
 
 emmip(comp_emm_b2in_within$AA, ~ drought | fertilizer, CIs = TRUE)</code></pre>
-<p><img src="/post/2021/07/29/r-anova/index_files/figure-html/unnamed-chunk-27-1.svg" width="672" /></p>
+<div class="figure"><span id="fig:emms-multiple-comparison-within-group-1"></span>
+<img src="/post/2021/07/31/r-anova/index_files/figure-html/emms-multiple-comparison-within-group-1.svg" alt="组内多重比较综合图" width="672" />
+<p class="caption">
+Figure 15: 组内多重比较综合图
+</p>
+</div>
 <pre class="r"><code>plot(comp_emm_b2in_within$AA, by = &quot;fertilizer&quot;, comparisons = TRUE)</code></pre>
-<p><img src="/post/2021/07/29/r-anova/index_files/figure-html/unnamed-chunk-27-2.svg" width="672" /></p>
+<div class="figure"><span id="fig:emms-multiple-comparison-within-group-2"></span>
+<img src="/post/2021/07/31/r-anova/index_files/figure-html/emms-multiple-comparison-within-group-2.svg" alt="组内多重比较综合图" width="672" />
+<p class="caption">
+Figure 16: 组内多重比较综合图
+</p>
+</div>
 <pre class="r"><code># (2) All pairwise comparisons
 comp_emm_b2in_pairwise &lt;- lapply(
     lrm_b2mix_sp, 
@@ -1100,7 +1187,12 @@ comp_tukey_b1dry_hsd &lt;- TukeyHSD(aov_b1dry)
 
 par(mar = c(5, 5, 3, 1), las = 1)
 plot(comp_tukey_b1dry_hsd)</code></pre>
-<p><img src="/post/2021/07/29/r-anova/index_files/figure-html/unnamed-chunk-28-1.svg" width="672" /></p>
+<div class="figure"><span id="fig:general-multiple-comparison-within-group-1"></span>
+<img src="/post/2021/07/31/r-anova/index_files/figure-html/general-multiple-comparison-within-group-1.svg" alt="组内多重比较其它图" width="672" />
+<p class="caption">
+Figure 17: 组内多重比较其它图
+</p>
+</div>
 <pre class="r"><code># 方法二：功能更强大
 library(multcomp)
 comp_tukey_b1dry_glht &lt;- glht(
@@ -1130,7 +1222,12 @@ tkcld_b1dry &lt;- cld(comp_tukey_b1dry_glht, level = 0.05)
 
 par(mai=c(1,1,1.5,1))
 plot(tkcld_b1dry, col = &quot;lightgrey&quot;)</code></pre>
-<p><img src="/post/2021/07/29/r-anova/index_files/figure-html/unnamed-chunk-28-2.svg" width="672" /></p>
+<div class="figure"><span id="fig:general-multiple-comparison-within-group-2"></span>
+<img src="/post/2021/07/31/r-anova/index_files/figure-html/general-multiple-comparison-within-group-2.svg" alt="组内多重比较其它图" width="672" />
+<p class="caption">
+Figure 18: 组内多重比较其它图
+</p>
+</div>
 </div>
 <div id="物种间比较" class="section level5">
 <h5>物种间比较</h5>
@@ -1166,6 +1263,7 @@ comp_hsd_b2fert_sp_spp &lt;- fun_mulcomp_res(
     ylab(&quot;Biomass&quot;) +
     geom_bar(position=&quot;dodge&quot;, stat = &quot;identity&quot;, color = &quot;black&quot;) +
     facet_wrap(~fertilizer, scale=&quot;free&quot;) +
+    # 标准差
     geom_errorbar(
         aes(ymin = biomass, ymax = biomass + std),
         width=.2,
@@ -1205,7 +1303,12 @@ pbar_comp_biomass_spp2 +
           annotation = groups,
           group = treat),
       inherit.aes = FALSE)</code></pre>
-<p><img src="/post/2021/07/29/r-anova/index_files/figure-html/unnamed-chunk-30-1.svg" width="672" /></p>
+<div class="figure"><span id="fig:multiple-comparison-between-group"></span>
+<img src="/post/2021/07/31/r-anova/index_files/figure-html/multiple-comparison-between-group-1.svg" alt="组间多重比较" width="672" />
+<p class="caption">
+Figure 19: 组间多重比较
+</p>
+</div>
 </div>
 </div>
 <div id="假设检验" class="section level4">
@@ -1246,11 +1349,21 @@ pbar_comp_biomass_spp2 +
 <pre class="r"><code># 残差分析
 par(mfrow = c(2, 2))
 plot(lrm_b2mix_sp$AA)</code></pre>
-<p><img src="/post/2021/07/29/r-anova/index_files/figure-html/unnamed-chunk-31-1.svg" width="672" /></p>
+<div class="figure"><span id="fig:diagnostics-linear-gression-1"></span>
+<img src="/post/2021/07/31/r-anova/index_files/figure-html/diagnostics-linear-gression-1.svg" alt="回归检验组图" width="672" />
+<p class="caption">
+Figure 20: 回归检验组图
+</p>
+</div>
 <pre class="r"><code># 使用隐式循环批量作图
 par(mfrow = c(4, 4))
 lapply(lrm_b2mix_sp, plot)</code></pre>
-<p><img src="/post/2021/07/29/r-anova/index_files/figure-html/unnamed-chunk-31-2.svg" width="672" /></p>
+<div class="figure"><span id="fig:diagnostics-linear-gression-2"></span>
+<img src="/post/2021/07/31/r-anova/index_files/figure-html/diagnostics-linear-gression-2.svg" alt="回归检验组图" width="672" />
+<p class="caption">
+Figure 21: 回归检验组图
+</p>
+</div>
 <pre><code>## $AA
 ## NULL
 ## 
@@ -1265,7 +1378,12 @@ lapply(lrm_b2mix_sp, plot)</code></pre>
 <pre class="r"><code># 实际值（观测值）与拟合值（预测值）
 par(mfrow=c(1,1))
 plot(lrm_b2mix_sp$AA$fitted.values ~ lrm_b2mix_sp$AA$model$biomass)</code></pre>
-<p><img src="/post/2021/07/29/r-anova/index_files/figure-html/unnamed-chunk-32-1.svg" width="672" /></p>
+<div class="figure"><span id="fig:observed-vs-fitted"></span>
+<img src="/post/2021/07/31/r-anova/index_files/figure-html/observed-vs-fitted-1.svg" alt="拟合效果图" width="672" />
+<p class="caption">
+Figure 22: 拟合效果图
+</p>
+</div>
 <pre class="r"><code># Q-Q 图
 qqplot()
 
@@ -1325,6 +1443,13 @@ car::outlierTest(lrm_b2mix_sp$AA)</code></pre>
 </main>
 
 <section class="appendix">
+
+
+<div>
+  <div class="side side-left"><h3>重复使用</h3></div>
+  本文文字和图表使用<a href="https://creativecommons.org/licenses/by/4.0/">知识共享许可协议 CC BY 4.0</a>，<a href="https://github.com/pftz/pftz">源文件</a>采用 MIT 协议。
+</div>
+
 
 
 <div>
