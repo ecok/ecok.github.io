@@ -1,0 +1,8 @@
+.summary::first-letter {
+  font-size: initial;
+  line-height:initial;
+}
+
+section.article-list.post-card {
+  flex: initial;
+}
