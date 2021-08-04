@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title> R 速查表：标准假设检验 | 有油</title>
+    
+    
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    <link rel="stylesheet" href="/css/custom.css" />
+    <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="R 速查表：标准假设检验"/>
+<meta name="twitter:description" content="常常为了快速查找 R 函数，会把一些功能相近的 R 函数做成速查表（cheatsheet），供参考索引。
+"/>
+
+
+  </head>
+
+  <body>
+
+    <nav class="menu">
+    <ul>
+      <li class="left">
+        <a href="/"><span>有油</span></a>
+      </li>
+      
+      <li>
+        <a href="/">首页</a>
+      </li>
+      
+      <li>
+        <a href="/archives/">归档</a>
+      </li>
+      
+      <li id="menu-search">
+        <a href="/#">搜索</a>
+      </li>
+      
+      <li>
+        <a href="/index.xml">订阅</a>
+      </li>
+      
+    </ul>
+    </nav>
+
+
+<div class="container single">
+<main>
+
+<div class="article-meta">
+<h1><span class="title">R 速查表：标准假设检验</span></h1>
+
+<h3 class="author">
+sanchufy
+</h3>
+
+<h3 class="date">2021-08-04</h3>
+<p class="terms">
+  
+  
+  Categories: <a href="/categories/r">R</a> <a href="/categories/%E7%BB%9F%E8%AE%A1">统计</a> 
+  
+  
+  
+  Tags: <a href="/tags/cheatsheet">cheatsheet</a> <a href="/tags/%E5%81%87%E8%AE%BE%E6%A3%80%E9%AA%8C">假设检验</a> 
+  
+  
+</p>
+</div>
+
+<div class="article">
+<p>常常为了快速查找 R 函数，会把一些功能相近的 R 函数做成<strong>速查表</strong>（cheat sheets/cheatsheets，也见翻译成小抄、备忘录），便于索引、参考，比如，RStudio 做了很多这种<a href="https://www.rstudio.com/resources/cheatsheets/">速查表</a>（管理的 <a href="https://github.com/rstudio/cheatsheets">Github 仓库</a>）。记得早几年也有过一些流行的中文翻译版，想必难以与原版的更新同步，又正值如今网上资源泛滥，流传得少了。</p>
+<p>统计分析也有一些这样的速查表，似乎容易被大众忽略。印象比较深的是统计之都上的一篇文章《<a href="https://cosx.org/2019/09/common-tests-as-linear-models/">翻译：常见统计检验的本质都是线性模型（或：如何教统计学）</a>》，尽管这个<a href="https://www.fyears.org/tests-as-linear/linear_tests_cheat_sheet.html">表格</a>并不是以速查表作为目的而设计。</p>
+<p>使用 R 进行统计分析的速查表似乎较少见到，但“我”更愿意相信：我能想到的东西别人也能想到，只是还没有被自己发现。遂搜了一下，的确是有的，比如<a href="https://cheatography.com/tag/statistics/">Statistics Cheat Sheets</a>（<a href="https://cheatography.com/xeonkai/cheat-sheets/basic-statistics-with-r/">Basic statistics with R Cheat Sheet</a>），看来日后也可收集一二。</p>
+<p>回到正题，这里所列的标准假设检验（<strong>Standard Hypothesis Testing</strong>）的速查表，是直接引用自 <em><a href="https://link.springer.com/book/10.1007%2F978-1-4614-9020-3">The R Software : Fundamentals of Programming and Statistical Analysis</a></em> （p.447）及其中文翻译版《<a href="https://academic.hep.com.cn/im/CN/book/978-7-04-041950-4-00">R软件教程与统计分析——入门到精通</a>》（pp.406-407），供查阅参考。</p>
+<p><strong>Table 1 标准检验</strong>（中文译版）</p>
+<table><colgroup> <col style="text-align: left;" /> <col style="text-align: left;" /> <col style="text-align: left;" /> <col style="text-align: left;" /> </colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">本质</th>
+<th style="text-align: left;">数据</th>
+<th style="text-align: left;">有效性条件</th>
+<th style="text-align: left;">R 函数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;" colspan="4"><strong>参数检验</strong>：</td>
+</tr>
+<tr>
+<tbody>
+<td style="text-align: left;" rowspan="4">均值&nbsp;&nbsp;&nbsp;</td>
+<td style="text-align: left;">单样本</td>
+<td style="text-align: left;"><span class="math">\(n &gt; 30\)</span> 或正态性</td>
+<td style="text-align: left;"><code>t.test(x,...)</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">两样本</td>
+<td style="text-align: left;">正态性与同方差</td>
+<td style="text-align: left;"><code>t.test(x,y,...)</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">两样本</td>
+<td style="text-align: left;">正态性</td>
+<td style="text-align: left;"><code>t.test(x,y,var.equal=F)</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">两配对样本</td>
+<td style="text-align: left;"><span class="math">\(n &gt; 30\)</span> 或正态性</td>
+<td style="text-align: left;"><code>t.test(x,y,paried=T)</code></td>
+</tr>
+<tr>
+</tbody>
+<tbody>
+<td style="text-align: left;" rowspan="3">方差&nbsp;&nbsp;</td>
+<td style="text-align: left;">单样本</td>
+<td style="text-align: left;">正态性</td>
+<td style="text-align: left;"><code>sigma2.test(x,...)</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">两样本</td>
+<td style="text-align: left;">正态性</td>
+<td style="text-align: left;"><code>var.test(x,y,...)</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">两样本</td>
+<td style="text-align: left;">大样本</td>
+<td style="text-align: left;"><code>asymp.test(x,y,...)</code></td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td style="text-align: left;" rowspan="2">相关系数&nbsp;</td>
+<td style="text-align: left;">单样本</td>
+<td style="text-align: left;">正态性, <span class="math">\(H_0:\rho=\rho_0\)</span></td>
+<td style="text-align: left;"><code>cor.test(x,y...)</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">两样本</td>
+<td style="text-align: left;">正态性</td>
+<td style="text-align: left;"><code>cor.test.2.sample(x,y,...)</code></td>
+</tr>
+<tr>
+</tbody>
+<tbody>
+<td style="text-align: left;" rowspan="3">比例&nbsp;&nbsp;</td>
+<td style="text-align: left;">单样本</td>
+<td style="text-align: left;"><span class="math">\(np&ge;5\)</span> 且 <span class="math">\(n(1-p)&ge;5\)</span></td>
+<td style="text-align: left;"><code>prop.test(x,...)</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">单样本</td>
+<td style="text-align: left;">&nbsp;</td>
+<td style="text-align: left;"><code>binom.test(x,...)</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">两样本</td>
+<td style="text-align: left;">大样本</td>
+<td style="text-align: left;"><code>prop.test(x,y,...)</code></td>
+</tr>
+</tbody>
+</tbody>
+<tbody>
+<tr>
+<td style="text-align: left;" colspan="4"><strong>独立性检验</strong>：</td>
+</tr>
+<tr>
+<td style="text-align: left;"><span class="math">\(\chi^2\)</span> 独立性检验</td>
+<td style="text-align: left;">列联表</td>
+<td style="text-align: left;">理论计数 <span class="math">\(&ge;5\)</span></td>
+<td style="text-align: left;"><code>chisq.test(.,correct=F)</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">Yates <span class="math">\(\chi^2\)</span> 检验</td>
+<td style="text-align: left;">2&times;2 表</td>
+<td style="text-align: left;">理论计数 <span class="math">\(&ge;2.5\)</span></td>
+<td style="text-align: left;"><code>chisq.test()</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">Fisher 精确检验</td>
+<td style="text-align: left;">列联表</td>
+<td style="text-align: left;">&nbsp;</td>
+<td style="text-align: left;"><code>fisher.test()</code></td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td style="text-align: left;" colspan="4"><strong>一个分布的拟合效果的检验</strong>：</td>
+</tr>
+<tr>
+<td style="text-align: left;">Shapiro-Wilk</td>
+<td style="text-align: left;">单样本</td>
+<td style="text-align: left;">&nbsp;</td>
+<td style="text-align: left;"><code>shapiro.text(x,...)</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">一个分布的拟合效果的 <span class="math">\(\chi^2\)</span> 检验</td>
+<td style="text-align: left;">单样本</td>
+<td style="text-align: left;">理论计数 <span class="math">\(&ge;5\)</span></td>
+<td style="text-align: left;"><code>chisq.test()</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">Kolmogorov-Smirnov</td>
+<td style="text-align: left;">单样本</td>
+<td style="text-align: left;">&nbsp;</td>
+<td style="text-align: left;"><code>ks.test(x,.)</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">&nbsp;</td>
+<td style="text-align: left;">两样本</td>
+<td style="text-align: left;">&nbsp;</td>
+<td style="text-align: left;"><code>ks.test(x,y)</code></td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td style="text-align: left;" colspan="4"><strong>位置的检验</strong>：</td>
+</tr>
+<tr>
+<td style="text-align: left;">中位数</td>
+<td style="text-align: left;">单样本</td>
+<td style="text-align: left;">&nbsp;</td>
+<td style="text-align: left;"><code>binom.test(x,)</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"  rowspan="2">符号检验</td>
+<td style="text-align: left;">两样本</td>
+<td style="text-align: left;">&nbsp;</td>
+<td style="text-align: left;"><code>fisher.test(x,y)</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">两配对样本</td>
+<td style="text-align: left;">&nbsp;</td>
+<td style="text-align: left;"><code>binom.test(x,y,paired=T)</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">Mann-Whitney</td>
+<td style="text-align: left;">两样本</td>
+<td style="text-align: left;"><span class="math">\(min(n_1,n_2)&ge;10\)</span></td>
+<td style="text-align: left;"><code>wilcox.test(x,y,exact=F)</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">Mann-Whitney</td>
+<td style="text-align: left;">两样本</td>
+<td style="text-align: left;"><span class="math">\(min(n_1,n_2)&le;10\)</span></td>
+<td style="text-align: left;"><code>wilcox.test(x,y)</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">Wilcoxon</td>
+<td style="text-align: left;">两配对样本</td>
+<td style="text-align: left;">&nbsp;</td>
+<td style="text-align: left;"><code>wilcox.test(x,y,paried=T)</code></td>
+</tr>
+</tbody>
+</table>
+<p>引自：Pierre Lafaye de Micheaux, Rémy Drouilhet, Benoit Liquet. 2013. The R Software: Fundamentals of Programming and Statistical Analysis. Springer, New York, NY. doi: <a href="https://doi.org/10.1007/978-1-4614-9020-3">10.1007/978-1-4614-9020-3</a>. p.447. 潘东东, 李启寨, 唐年胜, 译. 2015. R 软件教程与统计分析——入门到精通. 北京：高等教育出版社. pp.406-407.</p>
+<p><strong>Table 2 Standard tests</strong>（英文原版）</p>
+<table>
+  <col style="width:25.96%" />
+  <col style="width:18.27%" />
+  <col style="width:28.85%" />
+  <col style="width:26.92%" />
+  <thead>
+    <tr>
+      <th>
+        Nature
+      </th>
+      <th>
+        Data
+      </th>
+      <th>
+        Conditions for validaty
+      </th>
+      <th>
+        R function
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td colspan="4">
+        <strong>Parametric tests</strong>
+      </td>
+    </tr>
+  </tbody>
+  <tbody>
+    <tr>
+      <td rowspan="4">
+        Mean
+      </td>
+      <td>
+        1 sample
+      </td>
+      <td>
+        <span class="math">
+          \(n > 30\)
+        </span> or normality
+      </td>
+      <td>
+        <code>
+          t.test(x,...)
+        </code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        2 samples
+      </td>
+      <td>
+        Normality and equal variances
+      </td>
+      <td>
+        <code>
+          t.test(x,y,...)
+        </code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        2 samples
+      </td>
+      <td>
+        Normality
+      </td>
+      <td>
+        <code>
+          t.test(x,y,var.equal=F)
+        </code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        2 paired samples
+      </td>
+      <td>
+        <span class="math">
+          \(n > 30\)
+        </span> or normality
+      </td>
+      <td>
+        <code>
+          t.test(x,y,paried=T)
+        </code>
+      </td>
+    </tr>
+  </tbody>
+  <tbody>
+    <tr>
+      <td rowspan="3">
+        Variance
+      </td>
+      <td>
+        1 sample
+      </td>
+      <td>
+        Normality
+      </td>
+      <td>
+        <code>
+          sigma2.test(x,...)
+        </code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        2 samples
+      </td>
+      <td>
+        Normality
+      </td>
+      <td>
+        <code>
+          var.test(x,y,...)
+        </code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        2 samples
+      </td>
+      <td>
+        Large sample size
+      </td>
+      <td>
+        <code>
+          asymp.test(x,y,...)
+        </code>
+      </td>
+    </tr>
+  </tbody>
+    <tbody>
+    <tr>
+      <td rowspan="2">
+        Correlation
+      </td>
+      <td>
+        1 sample
+      </td>
+      <td>
+        Normality, <span class="math">\(H_0:\rho=\rho_0\)
+        </span>
+      </td>
+      <td>
+        <code>
+          cor.test(x,y)
+        </code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        2 samples
+      </td>
+      <td>
+        Normality
+      </td>
+      <td>
+        <code>
+          cor.test.2.sample(x,y)
+        </code>
+      </td>
+    </tr>
+  </tbody>
+  <tbody>
+    <tr>
+      <td rowspan="3">
+        Proportion
+      </td>
+      <td>
+        1 sample
+      </td>
+      <td>
+        <span class="math">
+          \(np≥5\)
+        </span> and <span class="math">\(n(n-p)≥5\)
+        </span>
+      </td>
+      <td>
+        <code>
+          prop.test(x,...)
+        </code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        1 sample
+      </td>
+      <td>
+      </td>
+      <td>
+        <code>
+          binom.test(x,...)
+        </code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        2 samples
+      </td>
+      <td>
+        Large sample size
+      </td>
+      <td>
+        <code>
+          prop.test(x,y,...)
+        </code>
+      </td>
+    </tr>
+  </tbody>
+  <tbody>
+    <tr>
+      <td colspan="4">
+        <strong>Independence tests</strong>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <span class="math">
+          \(\chi^2\)
+        </span> for independence
+      </td>
+      <td>
+        contingency table
+      </td>
+      <td>
+        Theoretical counts ≥ 5
+      </td>
+      <td>
+        <code>
+          chisq.test(.,correct=F)
+        </code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Yates' <span class="math">\(\chi^2\)
+        </span>
+      </td>
+      <td>
+        2×2 table
+      </td>
+      <td>
+        Theoretical counts ≥ 2.5
+      </td>
+      <td>
+        <code>
+          chisq.test()
+        </code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Fisher's exact test
+      </td>
+      <td>
+        contingency table
+      </td>
+      <td>
+      </td>
+      <td>
+        <code>
+          fisher.test()
+        </code>
+      </td>
+    </tr>
+  </tbody>
+  <tbody>
+    <tr>
+      <td colspan="4">
+        <strong>Tests of fit to a distribution</strong>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Shapiro-Wilk
+      </td>
+      <td>
+        1 sample
+      </td>
+      <td>
+      </td>
+      <td>
+        <code>
+          shapiro.test(x,...)
+        </code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <span class="math">
+          \(\chi^2\)
+        </span> of fit to a distribution
+      </td>
+      <td>
+        1 sample
+      </td>
+      <td>
+        Theoretical counts ≥ 5
+      </td>
+      <td>
+        <code>
+          chisq.test()
+        </code>
+      </td>
+    </tr>
+    <tr>
+      <td rowspan="2">
+        Kolmogorov-Smirnov
+      </td>
+      <td>
+        1 sample
+      </td>
+      <td>
+      </td>
+      <td>
+        <code>
+          ks.test(x,.)
+        </code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        2 samples
+      </td>
+      <td>
+      </td>
+      <td>
+        <code>
+          ks.test(x,y)
+        </code>
+      </td>
+    </tr>
+  </tbody>
+   <tbody>
+    <tr>
+      <td colspan="4">
+        <strong>Tests of position</strong>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Median
+      </td>
+      <td>
+        1 sample
+      </td>
+      <td>
+      </td>
+      <td>
+        <code>
+          binom.test(x,.)
+        </code>
+      </td>
+    </tr>
+    <tr>
+      <td rowspan="2">
+        Sign test
+      </td>
+      <td>
+        2 samples
+      </td>
+      <td>
+      </td>
+      <td>
+        <code>
+          fisher.test(x,y)
+        </code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        2 paired samples
+      </td>
+      <td>
+      </td>
+      <td>
+        <code>
+          binom.test(x,y,paried=T)
+        </code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Mann-Whitney
+      </td>
+      <td>
+        2 samples
+      </td>
+      <td>
+        <span class="math">
+          \(min(n_1,n_2)≥10\)
+        </span>
+      </td>
+      <td>
+        <code>
+          wilcox.test(x,y,exact=F)
+        </code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Mann-Whitney
+      </td>
+      <td>
+        2 samples
+      </td>
+      <td>
+        <span class="math">
+          \(min(n_1,n_2)≤10\)
+        </span>
+      </td>
+      <td>
+        <code>
+          wilcox.test(x,y)
+        </code>
+      </td>
+    </tr>
+    <tr>
+        <tr>
+      <td>
+        Wilcoxon
+      </td>
+      <td>
+        2 paired samples
+      </td>
+      <td>
+      </td>
+      <td>
+        <code>
+          wilcox.test(x,y,paired=T)
+        </code>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p><br /></p>
+
+</div>
+</main>
+
+
+<section class="appendix">
+
+
+<div>
+  <div class="side side-left"><h3>重复使用</h3></div>
+  本文文字和图表使用<a href="https://creativecommons.org/licenses/by/4.0/">知识共享许可协议 CC BY 4.0</a>，<a href="https://github.com/pftz/pftz">源文件</a>采用 MIT 协议。
+</div>
+
+
+
+<div>
+  <div class="side side-left"><h3>欢迎修订</h3></div>
+  
+  
+  
+    
+    
+  
+  如果您发现本文里含有任何错误（包括错别字和标点符号），欢迎<a href="https://github.com/pftz/pftz/edit/master/content/note/2021-08-03-r-cheatsheet-standard-tests/index.md" id="edit-link">在本站的 GitHub 项目里提交修订意见。</a>
+</div>
+
+
+
+<div>
+  <div class="side side-left"><h3>欢迎留言</h3></div>
+  <script src="https://utteranc.es/client.js"
+      repo="pftz/pftz"
+      issue-term="pathname"
+      label="comment"
+      theme="github-light"
+      crossorigin="anonymous"
+      async>
+  </script>
+</div>
+</section>
+
+
+
+
+<nav class="post-nav">
+  <span class="nav-next"></span>
+  &hercon;
+  <span class="nav-prev"></span>
+</nav>
+
+
+
+
+
+</div>
+
+
+  <footer>
+  <script async src="//yihui.org/js/center-img.js"></script>
+
+
+
+<script src="//yihui.org/js/math-code.js"></script>
+<script async src="//mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+  <div class="footer">
+  
+  <ul class="copyright">
+    <li>© PFTZ (2021 - 2021)</li>
+  </ul>
+  
+  <ul>
+    
+    <li>
+      <a href="/about/">关于</a>
+    </li>
+    
+    <li class="optional">
+      <a href="/categories/">分类</a>
+    </li>
+    
+    <li class="optional">
+      <a href="/tags/">标签</a>
+    </li>
+    
+    <li id="menu-edit">
+      <a href="#">编辑</a>
+    </li>
+    
+    <li>
+      <a href="#">顶部</a>
+    </li>
+    
+  </ul>
+  </div>
+  
+  </footer>
+  <script async src="/js/features.js" data-page-features="[null,[&#34;&#43;sidenotes&#34;],null]"></script>
+  </body>
+</html>
+
