@@ -5,9 +5,20 @@
     <description>Recent content in 首页 on 有油</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Wed, 04 Aug 2021 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 05 Aug 2021 00:00:00 +0000</lastBuildDate>
     <atom:link href="/" rel="self" type="application/rss+xml" />
 
+    
+      <item>
+        <title>Posts</title>
+        <link>/post/</link>
+        <pubDate>Thu, 05 Aug 2021 00:00:00 +0000</pubDate>
+        
+        <guid>/post/</guid>
+        <description>
+          
+        </description>
+      </item>
     
       <item>
         <title>Notes</title>
@@ -15,17 +26,6 @@
         <pubDate>Wed, 04 Aug 2021 00:00:00 +0000</pubDate>
         
         <guid>/note/</guid>
-        <description>
-          
-        </description>
-      </item>
-    
-      <item>
-        <title>Posts</title>
-        <link>/post/</link>
-        <pubDate>Sat, 31 Jul 2021 00:00:00 +0000</pubDate>
-        
-        <guid>/post/</guid>
         <description>
           
         </description>
@@ -43,6 +43,11 @@
 &lt;h2 class=&#34;archive-title&#34;&gt;2021&lt;/h2&gt;
 &lt;ul&gt;
   
+  &lt;li&gt;
+  &lt;span class=&#34;date&#34;&gt;2021/08/05&lt;/span&gt;
+  &lt;a href=&#34;/post/2021/08/05/r-markdown-tables/&#34;&gt;在 Markdown、R Markdown 中使用表格&lt;/a&gt;
+&lt;/li&gt;
+
   &lt;li&gt;
   &lt;span class=&#34;date&#34;&gt;2021/08/04&lt;/span&gt;
   &lt;a href=&#34;/note/r-cheatsheet-standard-tests/&#34;&gt;R 速查表：标准假设检验&lt;/a&gt;
