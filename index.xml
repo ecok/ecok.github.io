@@ -5,14 +5,14 @@
     <description>Recent content in 首页 on 有油</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Thu, 05 Aug 2021 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 06 Aug 2021 00:00:00 +0000</lastBuildDate>
     <atom:link href="/" rel="self" type="application/rss+xml" />
 
     
       <item>
         <title>Posts</title>
         <link>/post/</link>
-        <pubDate>Thu, 05 Aug 2021 00:00:00 +0000</pubDate>
+        <pubDate>Fri, 06 Aug 2021 00:00:00 +0000</pubDate>
         
         <guid>/post/</guid>
         <description>
@@ -44,6 +44,11 @@
 &lt;ul&gt;
   
   &lt;li&gt;
+  &lt;span class=&#34;date&#34;&gt;2021/08/06&lt;/span&gt;
+  &lt;a href=&#34;/post/2021/08/06/r-anova/&#34;&gt;R 方差分析：以多物种、双因素为例&lt;/a&gt;
+&lt;/li&gt;
+
+  &lt;li&gt;
   &lt;span class=&#34;date&#34;&gt;2021/08/05&lt;/span&gt;
   &lt;a href=&#34;/post/2021/08/05/r-markdown-tables/&#34;&gt;在 Markdown、R Markdown 中使用表格&lt;/a&gt;
 &lt;/li&gt;
@@ -51,11 +56,6 @@
   &lt;li&gt;
   &lt;span class=&#34;date&#34;&gt;2021/08/04&lt;/span&gt;
   &lt;a href=&#34;/note/r-cheatsheet-standard-tests/&#34;&gt;R 速查表：标准假设检验&lt;/a&gt;
-&lt;/li&gt;
-
-  &lt;li&gt;
-  &lt;span class=&#34;date&#34;&gt;2021/07/31&lt;/span&gt;
-  &lt;a href=&#34;/post/2021/07/31/r-anova/&#34;&gt;R 方差分析：以多物种、双因素为例&lt;/a&gt;
 &lt;/li&gt;
 
 &lt;/ul&gt;

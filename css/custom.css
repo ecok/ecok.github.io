@@ -1,6 +1,7 @@
 .summary::first-letter {
   font-size: initial;
   line-height:initial;
+  padding: initial;
 }
 
 section.article-list.post-card {
