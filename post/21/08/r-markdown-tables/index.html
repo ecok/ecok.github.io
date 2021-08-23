@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title> 在 Markdown、R Markdown 中使用表格 | 有油</title>
+    
+    
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    <link rel="stylesheet" href="/css/custom.css" />
+    <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="在 Markdown、R Markdown 中使用表格"/>
+<meta name="twitter:description" content="Markdown 表格大概有两种，一种经数据转换，另一种为手动输入。使用复杂表格可以说是 Markdown 的一大痛点。"/>
+
+
+  </head>
+
+  <body class="draft">
+
+    <nav class="menu">
+    <ul>
+      <li class="left">
+        <a href="/"><span>有油</span></a>
+      </li>
+      
+      <li>
+        <a href="/">首页</a>
+      </li>
+      
+      <li>
+        <a href="/digest/">摘讯</a>
+      </li>
+      
+      <li id="menu-search">
+        <a href="/#">搜索</a>
+      </li>
+      
+      <li>
+        <a href="/index.xml">订阅</a>
+      </li>
+      
+    </ul>
+    </nav>
+
+
+<div class="container single">
+<main>
+
+<div class="watermark">Draft</div>
+
+<div class="article-meta">
+<h1><span class="title">在 Markdown、R Markdown 中使用表格</span></h1>
+
+<h3 class="author">
+sanchufy
+</h3>
+
+<h3 class="date">2021-08-05</h3>
+<p class="terms">
+  
+  
+  Categories: <a href="/categories/r-%E8%AF%AD%E8%A8%80">R 语言</a> 
+  
+  
+  
+  Tags: <a href="/tags/rmarkdown">rmarkdown</a> <a href="/tags/markdown">markdown</a> 
+  
+  
+</p>
+</div>
+
+<div class="article">
+<h1 id="表格形式">表格形式</h1>
+<p>Markdown 表格大概有两种，一种是经数据存储格式转换为标准表格样式，通常是整齐的数据或文本（这里暂称为“转换的数据表格”）；另一种是手动输入为表格形式，一般是为了便于组织内容，使文本更清晰易读（这里暂称为“输入的文本表格”）。</p>
+<h2 id="转换的数据表格">转换的数据表格</h2>
+<p>在 R Markdown 中可以通过各种包（packages）将数据转为表格形式。在 <em><a href="https://bookdown.org/yihui/rmarkdown-cookbook/tables.html">R Markdown Cookbook</a></em> 一书中主要介绍了两种方式，<code>knitr::kable()</code> 和 <strong><a href="https://cran.r-project.org/web/packages/kableExtra/vignettes/awesome_table_in_html.html">kableExtra</a></strong> 包，后者是对前者的进一步补充和扩展。</p>
+<p>书中还列举了一些<a href="https://bookdown.org/yihui/rmarkdown-cookbook/table-other.html">其它的包</a>，比如：</p>
+<ul>
+<li><strong><a href="https://davidgohel.github.io/flextable/">flextable</a></strong> 包，支持多种输出格式</li>
+<li><strong><a href="https://hughjonesd.github.io/huxtable/">huxtable</a></strong> 包，支持多种输出格式</li>
+<li><strong><a href="https://cran.r-project.org/package=stargazer">stargazer</a></strong> 包，支持列表</li>
+<li><strong><a href="https://github.com/nutterb/pixiedust">pixiedust</a></strong> 包，为 <strong>broom</strong> 包整理后的结果创建表格</li>
+</ul>
+<p>结合 <strong><a href="https://broom.tidymodels.org/">broom</a></strong> 等包，可以将统计模型与计算的结果便捷的输出为整洁的表格。</p>
+<h2 id="输入的文本表格">输入的文本表格</h2>
+<p>Mardown 中的表格需要扩展支持，常见的是简单表（simple tables）和管道表（pipe tables），更为复杂的是网格表（grid tables）。</p>
+<p>对于 Markdown 解析器（parsers；标记识别符，markup identifier），R markdown 需要 <a href="https://pandoc.org/">Pandoc</a>  提供支持；blogdown 依赖 Hugo，其 0.60.0 版以后默认使用 <a href="https://github.com/yuin/goldmark/">Goldmark</a> 识别，尽管也可使用 Pandoc 或 <a href="https://asciidoctor.org/">AsciiDoc</a> 等替代；而常用的源代码托管服务平台 Github 自身也支持 Markdown。下面对这些常用的工具进行简单的了解。</p>
+<h3 id="pandoc-tables">Pandoc</h3>
+<p><a href="https://pandoc.org/MANUAL.html">Pandoc</a> 目前仍<a href="https://github.com/jgm/pandoc/issues/6317">不支持合并单元格</a>，不过它们能将各种类型标记的表格渲染成它们所支持的表格样式，参见<a href="https://github.com/jgm/pandoc-types/pull/66">Better tables</a>。</p>
+<ol>
+<li>扩展：<a href="https://pandoc.org/MANUAL.html#extension-simple_tables">simple_tables</a></li>
+</ol>
+<pre><code class="language-markdown">  Right     Left     Center     Default
+-------     ------ ----------   -------
+      1     2          34            56
+
+Table:  Demonstration of simple table syntax.
+</code></pre>
+<ol start="2">
+<li>扩展：<a href="https://pandoc.org/MANUAL.html#extension-pipe_tables">pipe_tables</a></li>
+</ol>
+<pre><code class="language-markdown">| Right | Left | Default | Center |
+|------:|:-----|---------|:------:|
+|   12  |  12  |    12   |    12  |
+
+: Demonstration of pipe table syntax.
+</code></pre>
+<ol start="3">
+<li>扩展：<a href="https://pandoc.org/MANUAL.html#extension-grid_tables">grid_tables</a></li>
+</ol>
+<pre><code class="language-markdown">: Sample grid table.
+
++---------------+---------------+--------------------+
+| Fruit         | Price         | Advantages         |
++===============+===============+====================+
+| Bananas       | $1.34         | - built-in wrapper |
+|               |               | - bright color     |
++---------------+---------------+--------------------+
+</code></pre>
+<h3 id="github-flavored-markdown-gfm">GitHub Flavored Markdown, GFM</h3>
+<p><a href="https://github.github.com/gfm/#tables-extension-">GitHub Flavored Markdown</a> 表格扩展支持管道表，不支持网格表。Goldenmark 采用了 GitHub Flavored Markdown 的表格扩展规范，因此语法相同。</p>
+<ol>
+<li>管道表（1）</li>
+</ol>
+<pre><code class="language-markdown">| foo | bar |
+| --- | --- |
+| baz | bim |
+</code></pre>
+<ol start="2">
+<li>管道表（2）</li>
+</ol>
+<pre><code>| abc | defghi |
+:-: | -----------:
+bar | baz
+</code></pre>
+<h3 id="其它">其它</h3>
+<p>Pandoc、GMF 和 Hugo 都不支持单元格跨行（rowspan）、跨列（colspan），即合并单元格（merge cells）。如果要在 Markdown 文档中实现这种合并行或合并列的表格，可采取如下步骤 <sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>：</p>
+<ol>
+<li>使用其它工具支持的表格语法创建：
+<ul>
+<li><a href="https://fletcher.github.io/MultiMarkdown-6/">MultiMarkdown</a> 仅支持列合并，不支持行合并；支持用空行生成 <code>&lt;tbody&gt;</code> 标签衔接和强调表格的不同部分</li>
+<li><a href="https://github.com/xoofx/markdig/blob/master/src/Markdig.Tests/Specs/GridTableSpecs.md">Markdig</a> 支持规则矩形的合并行及合并列</li>
+<li>在线工具 <a href="https://www.madoko.net/editor.html">Madoko</a>，也支持合并列</li>
+</ul>
+</li>
+<li>在本地或 <a href="https://babelmark.github.io/">babelmark3</a> 等在线平台生成 HTML 编码及表格预览；</li>
+<li>如可正常预览，则复制其 HTML 源码；也可将 HTML 源码粘贴至 <a href="https://html-cleaner.com/">HTML-Cleaner</a> 中，进一步微调；</li>
+<li>在 Markdown 文档中粘贴此源码，绝大部分编译工具应该支持这种混合的语法。</li>
+</ol>
+<p>经个人实践：</p>
+<ul>
+<li>MultiMarkdown：在本地 PowerShell 中运行命令，中文出现了乱码，而 CMD 中正常，猜测与本地的编码设置有关。如需跨行合并，建议采用上述步骤 3 中的方法实现。</li>
+<li>Markdig 目前似乎对中文不够友好，在相同格式情况下，<a href="https://babelmark.github.io/">babelmark3</a> 和 Notepad++ 扩展 <a href="https://github.com/nea/MarkdownViewerPlusPlus">MarkdownViewerPlusPlus</a> 对英文正确渲染而中文不行。其次，babelmark3 中常常不能对长表格、多个或大号合并单元格正确识别，如果将表格拆分成多次提交，则可拼接成完整表格。</li>
+</ul>
+<h4 id="markdig-grid-table">Markdig: Grid Table</h4>
+<p>Markdig 中的<a href="https://github.com/xoofx/markdig/blob/master/src/Markdig.Tests/Specs/GridTableSpecs.md">网格表</a>语法部分展示如下：</p>
+<pre><code>+---------+---------+
+| Header  | Header  |
+| Column1 | Column2 |
++=========+=========+
+| 1. ab   | &gt; This is a quote
+| 2. cde  | &gt; For the second column 
+| 3. f    |
++---------+---------+
+</code></pre>
+<pre><code>+---+---+---+
+| AAAAA | B |
++---+---+ B +
+| D | E | B |
++ D +---+---+
+| D | CCCCC |
++---+---+---+
+</code></pre>
+<h1 id="表格内容">表格内容</h1>
+<h2 id="表格标题">表格标题</h2>
+<ol>
+<li>Pandoc</li>
+</ol>
+<p>扩展：<a href="https://pandoc.org/MANUAL.html#extension-table_captions">table_captions</a></p>
+<p>另参考本文 <a href="#pandoc-tables" title="Pandoc tables">Pandoc</a> 示例。</p>
+<h2 id="表格脚注">表格脚注</h2>
+<h1 id="表格样式">表格样式</h1>
+<p>HTML 表格一般通过 CSS 设定各种主题（颜色、格式等）。R 中也有一些包或工具帮助科学和技术交流文档实现贴合的主题样式，并且不限于表格，也不限于 HTML 格式。此处简要的罗列几种：</p>
+<ul>
+<li>RStudio: <a href="https://rstudio.github.io/distill">Distill web framework</a> 创建网络发布格式
+<ul>
+<li><code>rmarkdown::paged_table()</code>：可分页的表格</li>
+<li><strong>gt</strong> 包和 <strong>gtsummary</strong> 包：可供出版的分析和汇总表</li>
+</ul>
+</li>
+<li>前面提到过的在线工具 <a href="https://www.madoko.net/editor.html">Madoko</a> 也是一个专注于学术和技术文章的 Markdown 解析器。其它可参考：<a href="https://danmackinlay.name/notebook/academic_blogging_workflow.html#distill">Academic blogging workflow</a></li>
+</ul>
+<p>其它可以了解的包或项目：</p>
+<ul>
+<li><strong><a href="https://community.rstudio.com/t/output-nice-looking-formatted-tables/1084">Output Nice-Looking Formatted Tables</a></strong></li>
+<li><strong><a href="https://github.com/ropenscilabs/packagemetrics#creating-a-pretty-metrics_table">sfirke/packagemetrics</a></strong> | <a href="https://github.com/sfirke/packagemetrics/blob/master/inst/examples/tableGallery.Rmd">tableGallery</a></li>
+<li><strong><a href="https://dmyee.files.wordpress.com/2016/03/table_workshop.pdf">sjPlot</a></strong></li>
+<li><strong><a href="https://github.com/renkun-ken/formattable/">renkun-ken/formattable</a></strong></li>
+</ul>
+<h1 id="后记">后记</h1>
+<p>2004 年 John Gruber 和 Aaron Swartz 合作开发了 Markdown，这一早期的简单版本在随后十年间得到了大规模的使用，并引入了大量的扩展语法，与此同时也带来了语法多样而混乱的现象，这与最初的 Markdown 设计初衷背道而驰。于是，Pandoc 的开发者 John MacFarlane 连同其它开发者一起发展形成了 <a href="https://commonmark.org/">CommonMark</a> 这一标准语法规范，旨在让 Markdown 使用起来简单而明确，无论使用何种解析器，都可以得到相似的输出显示。Pandoc、Github、Goldmark 均与 CommonMark 兼容。在这一规范的讨论区，也有对表格长期的讨论，如 <a href="https://talk.commonmark.org/t/tables-in-pure-markdown/81">Tables in pure Markdown</a>。</p>
+<section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1" role="doc-endnote">
+<p>上一篇笔记《 <a href="/note/r-cheatsheet-standard-tests/">R 速查表：标准假设检验</a>》中的表格便是采用了这一流程实现。&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
+
+</div>
+</main>
+
+
+<section class="appendix">
+
+
+<div>
+  <div class="side side-left"><h3>重复使用</h3></div>
+  本文文字和图表使用<a href="https://creativecommons.org/licenses/by/4.0/">知识共享许可协议 CC BY 4.0</a>，<a href="https://github.com/pftz/pftz">源文件</a>采用 MIT 协议。
+</div>
+
+
+
+<div>
+  <div class="side side-left"><h3>欢迎修订</h3></div>
+  
+  
+  
+    
+    
+  
+  如果您发现本文里含有任何错误（包括错别字和标点符号），欢迎<a href="https://github.com/pftz/pftz/edit/master/content/post/21-08-r-markdown-tables.md" id="edit-link">在本站的 GitHub 项目里提交修订意见。</a>
+</div>
+
+
+
+<div>
+  <div class="side side-left"><h3>欢迎留言</h3></div>
+  <script src="https://utteranc.es/client.js"
+      repo="pftz/pftz"
+      issue-term="pathname"
+      label="comment"
+      theme="github-light"
+      crossorigin="anonymous"
+      async>
+  </script>
+</div>
+</section>
+
+
+
+
+<nav class="post-nav">
+  <span class="nav-next"></span>
+  &hercon;
+  <span class="nav-prev"><a href="/post/21/08/r-anova/" title=上一篇&#32;(新)>R 方差分析：以多物种、双因素为例</a> &rarr;</span>
+</nav>
+
+
+
+
+
+</div>
+
+
+  <footer>
+  <script async src="//yihui.org/js/center-img.js"></script>
+
+
+
+<script src="//yihui.org/js/math-code.js"></script>
+<script async src="//mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>
+hljs.configure({languages: []});
+hljs.initHighlightingOnLoad();
+</script>
+
+
+  <div class="footer">
+  
+  <ul class="copyright">
+    <li>© PFTZ (2021 - 2021)</li>
+  </ul>
+  
+  <ul>
+    
+    <li>
+      <a href="/archives/">归档</a>
+    </li>
+    
+    <li class="optional">
+      <a href="/categories/">分类</a>
+    </li>
+    
+    <li class="optional">
+      <a href="/tags/">标签</a>
+    </li>
+    
+    <li id="menu-edit">
+      <a href="#">编辑</a>
+    </li>
+    
+    <li>
+      <a href="#">顶部</a>
+    </li>
+    
+  </ul>
+  </div>
+  
+  </footer>
+  <script async src="/js/features.js" data-page-features="[[&#34;&#43;toc&#34;,&#34;&#43;number_sections&#34;,&#34;&#43;sidenotes&#34;],[&#34;&#43;sidenotes&#34;],null]"></script>
+  </body>
+</html>
+

@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title> 科技文章标题翻译脚本 | 有油</title>
+    
+    
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    <link rel="stylesheet" href="/css/custom.css" />
+    <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="科技文章标题翻译脚本"/>
+<meta name="twitter:description" content="这是一个浏览器用户脚本，目前支持 WOS、Google Scholar、Inoreader 文章标题的自动翻译。"/>
+
+
+  </head>
+
+  <body>
+
+    <nav class="menu">
+    <ul>
+      <li class="left">
+        <a href="/"><span>有油</span></a>
+      </li>
+      
+      <li>
+        <a href="/">首页</a>
+      </li>
+      
+      <li>
+        <a href="/digest/">摘讯</a>
+      </li>
+      
+      <li id="menu-search">
+        <a href="/#">搜索</a>
+      </li>
+      
+      <li>
+        <a href="/index.xml">订阅</a>
+      </li>
+      
+    </ul>
+    </nav>
+
+
+<div class="container single">
+<main>
+
+<div class="article-meta">
+<h1><span class="title">科技文章标题翻译脚本</span></h1>
+
+<h3 class="author">
+sanchufy
+</h3>
+
+<h3 class="date">2021-08-23</h3>
+<p class="terms">
+  
+  
+  Categories: <a href="/categories/javascript">javascript</a> <a href="/categories/%E5%B7%A5%E5%85%B7">工具</a> 
+  
+  
+  
+  Tags: <a href="/tags/userscript">userscript</a> <a href="/tags/%E7%BF%BB%E8%AF%91">翻译</a> 
+  
+  
+</p>
+</div>
+
+<div class="article">
+<p>最开始是看到小伙伴在开始选题时，在 Web of Science 上使用划词翻译软件快速阅读、筛选大量相关文章——一篇一篇取词、翻译、再取词、再翻译&hellip;&hellip;当然，这是我们大家都很熟悉的动作了。当时，深深觉得这应该是脚本很适合干的活儿。</p>
+<p>最近便发现一个十分强大的用户脚本&mdash;&mdash;<a href="https://greasyfork.org/zh-CN/scripts/378277-%E7%BF%BB%E8%AF%91%E6%9C%BA"><strong>翻译机：该脚本用于翻译各类常用社交网站为中文，不会经过中间服务器</strong></a>，可以实现这样的功能。这个脚本格式清晰，也比较好入手&quot;<del>借鉴</del>抄袭&quot;。Ta 已经把最核心的调用翻译工具的代码都写好了，并且设定了很友好的框架逻辑，看起来剩下的只要会简单的 CSS 选择器，就可以很方便地&quot;<del>移植</del>抄袭&quot;了。</p>
+<p>原脚本支持的翻译网站仅是社交网站，未免太浪费了。内置的翻译源包括：谷歌翻译、有道翻译、 彩云小译、必应翻译等 8 种以上主流的来源<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>，已经非常强大够用了。</p>
+<p>接下来，我们试着加入科技学术论文数据库网站，实现标题的自动翻译。</p>
+<h1 id="web-of-science">Web of Science</h1>
+<p>CSS 选择器：</p>
+<ul>
+<li>支持检索页、详情页；</li>
+<li>仅一个标题时翻译，多标题时不翻译<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>，例如，含英文及中文标题时，则不翻译;</li>
+<li>已知的 bug：经翻译的详情页无法通过标题上方的 Results 链接返回结果页，该链接被吞。</li>
+</ul>
+<pre><code class="language-js">'WebofScience':{
+    name:'WebofScience',
+    matcher:/https:\/\/.*?.webofscience.com\/.+/,
+    selector:baseSelector('app-summary-title &gt; \
+    h3.ng-star-inserted:only-child, \
+    #snMainArticle &gt; div:nth-child(1) &gt; div:only-child \
+    #FullRTa-fullRecordtitle-0[class=&quot;title text--large&quot;]'),
+    textGetter:baseTextGetter,
+    textSetter:baseTextSetter
+}
+</code></pre>
+<p>效果展示：</p>
+<p><a href="https://www.webofscience.com/">
+  <figure>
+    <img src="/assets/image/21-08-wos-summary-title-translation.png" alt="WOS 检索页">
+    <figcaption>Figure 1: WOS 检索页标题翻译</figcaption>
+  </figure>
+
+</a></p>
+<p><a href="https://www.webofscience.com/">
+  <figure>
+    <img src="/assets/image/21-08-wos-record-title-translation.png" alt="WOS 详情页">
+    <figcaption>Figure 2: WOS 详情页标题翻译</figcaption>
+  </figure>
+
+</a></p>
+<p>详情页中的 DOI 跳转和复制按钮使用了另一脚本实现。</p>
+<h1 id="google-scholar">Google Scholar</h1>
+<p>CSS 选择器：</p>
+<pre><code class="language-js">'GoogleScholar':{
+    name:'谷歌学术',
+    matcher:/https:\/\/(scholar.google.com|en.yaodeyo.com:92)\/.+/,
+    selector:baseSelector('.gs_ri &gt; h3 a'),
+    textGetter:baseTextGetter,
+    textSetter:baseTextSetter
+}
+</code></pre>
+<p>效果展示：</p>
+<p><a href="https://scholar.google.com/">
+  <figure>
+    <img src="/assets/image/21-08-scholar-title-google-translation.png" alt="谷歌学术">
+    <figcaption>Figure 3: 谷歌学术 - 谷歌翻译</figcaption>
+  </figure>
+
+</a></p>
+<p><a href="https://en.yaodeyo.com:92/">
+  <figure>
+    <img src="/assets/image/21-08-scholar-title-youdao-translation.png" alt="谷歌学术">
+    <figcaption>Figure 4: 谷歌学术镜像 - 有道翻译</figcaption>
+  </figure>
+
+</a></p>
+<h1 id="inoreaderinnoreader">Inoreader/Innoreader</h1>
+<p>CSS 选择器：</p>
+<pre><code class="language-js">'Inoreader':{
+    name:'Inoreader',
+    matcher:/https:\/\/.*?.inn?oreader.com\/.+/,
+    selector:baseSelector('div[class^=&quot;article&quot;][class$=&quot;title&quot;] &gt; a, \
+    div[class~=&quot;article_title&quot;] &gt; a'),
+    textGetter:baseTextGetter,
+    textSetter:baseTextSetter
+}
+</code></pre>
+<p>效果展示：</p>
+<p><a href="https://www.inoreader.com/">
+  <figure>
+    <img src="/assets/image/21-08-inoreader-column-title-translation.png" alt="Inoreader">
+    <figcaption>Figure 5: Inoreader 订阅器 - 分列模式</figcaption>
+  </figure>
+
+</a></p>
+<p><a href="https://www.innoreader.com/">
+  <figure>
+    <img src="/assets/image/21-08-innoreader-card-title-translation.png" alt="Innoreader">
+    <figcaption>Figure 6: innoreader 订阅器 - 卡片模式</figcaption>
+  </figure>
+
+</a></p>
+<h1 id="提示">提示</h1>
+<ul>
+<li>一般的<a href="https://greasyfork.org/zh-CN/">用户脚本安装指南</a></li>
+<li>免费服务，就不要恶意频繁地请求了，不然会经常看到翻译报错</li>
+<li>目前不确定这个脚本的开源许可协议，权作自用</li>
+<li>本脚本很好扩展至其它网站（含镜像站），若有其它好的建议，可下方留言/评论</li>
+</ul>
+<section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1" role="doc-endnote">
+<p>这些翻译通常是使用的公共免费服务，一般均有访问频次、每日访问次数等限制，因此是不稳定的，更好地体验可以自行申请 API。&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2" role="doc-endnote">
+<p>目的是为了有中文标题时，则不翻译。但这应该无法单纯通过 CSS 选择器完美实现，要么另写 jQuery/JS 选择，要么就是如此这般一刀切。&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
+
+</div>
+</main>
+
+
+<section class="appendix">
+
+
+<div>
+  <div class="side side-left"><h3>重复使用</h3></div>
+  本文文字和图表使用<a href="https://creativecommons.org/licenses/by/4.0/">知识共享许可协议 CC BY 4.0</a>，<a href="https://github.com/pftz/pftz">源文件</a>采用 MIT 协议。
+</div>
+
+
+
+<div>
+  <div class="side side-left"><h3>欢迎修订</h3></div>
+  
+  
+  
+    
+    
+  
+  如果您发现本文里含有任何错误（包括错别字和标点符号），欢迎<a href="https://github.com/pftz/pftz/edit/master/content/post/21-08-userscript-scientific-article-title-translation/21-08-userscript-scientific-article-title-translation.md" id="edit-link">在本站的 GitHub 项目里提交修订意见。</a>
+</div>
+
+
+
+<div>
+  <div class="side side-left"><h3>欢迎留言</h3></div>
+  <script src="https://utteranc.es/client.js"
+      repo="pftz/pftz"
+      issue-term="pathname"
+      label="comment"
+      theme="github-light"
+      crossorigin="anonymous"
+      async>
+  </script>
+</div>
+</section>
+
+
+
+
+<nav class="post-nav">
+  <span class="nav-next">&larr; <a href="/post/21/08/r-anova/" title=下一篇&#32;(旧)>R 方差分析：以多物种、双因素为例</a></span>
+  &hercon;
+  <span class="nav-prev"></span>
+</nav>
+
+
+
+
+
+</div>
+
+
+  <footer>
+  <script async src="//yihui.org/js/center-img.js"></script>
+
+
+
+<script src="//yihui.org/js/math-code.js"></script>
+<script async src="//mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>
+hljs.configure({languages: []});
+hljs.initHighlightingOnLoad();
+</script>
+
+
+  <div class="footer">
+  
+  <ul class="copyright">
+    <li>© PFTZ (2021 - 2021)</li>
+  </ul>
+  
+  <ul>
+    
+    <li>
+      <a href="/archives/">归档</a>
+    </li>
+    
+    <li class="optional">
+      <a href="/categories/">分类</a>
+    </li>
+    
+    <li class="optional">
+      <a href="/tags/">标签</a>
+    </li>
+    
+    <li id="menu-edit">
+      <a href="#">编辑</a>
+    </li>
+    
+    <li>
+      <a href="#">顶部</a>
+    </li>
+    
+  </ul>
+  </div>
+  
+  </footer>
+  <script async src="/js/features.js" data-page-features="[[&#34;&#43;toc&#34;,&#34;&#43;number_sections&#34;,&#34;&#43;sidenotes&#34;],[&#34;&#43;sidenotes&#34;],&#34;目录&#34;]"></script>
+  </body>
+</html>
+
