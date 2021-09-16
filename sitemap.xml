@@ -3,30 +3,36 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>/categories/</loc>
-    <lastmod>2021-08-23T08:30:24+08:00</lastmod>
+    <lastmod>2021-09-16T19:01:32+08:00</lastmod>
   </url><url>
     <loc>/categories/javascript/</loc>
-    <lastmod>2021-08-23T08:30:24+08:00</lastmod>
+    <lastmod>2021-09-16T19:01:32+08:00</lastmod>
   </url><url>
     <loc>/post/</loc>
-    <lastmod>2021-08-23T08:30:24+08:00</lastmod>
+    <lastmod>2021-09-16T19:01:32+08:00</lastmod>
   </url><url>
     <loc>/tags/</loc>
-    <lastmod>2021-08-23T08:30:24+08:00</lastmod>
+    <lastmod>2021-09-16T19:01:32+08:00</lastmod>
   </url><url>
     <loc>/tags/userscript/</loc>
-    <lastmod>2021-08-23T08:30:24+08:00</lastmod>
+    <lastmod>2021-09-16T19:01:32+08:00</lastmod>
   </url><url>
     <loc>/categories/%E5%B7%A5%E5%85%B7/</loc>
-    <lastmod>2021-08-23T08:30:24+08:00</lastmod>
+    <lastmod>2021-09-16T19:01:32+08:00</lastmod>
+  </url><url>
+    <loc>/post/21/09/userscript-scientific-article-word-highlight/</loc>
+    <lastmod>2021-09-16T19:01:32+08:00</lastmod>
+  </url><url>
+    <loc>/tags/%E9%98%85%E8%AF%BB/</loc>
+    <lastmod>2021-09-16T19:01:32+08:00</lastmod>
+  </url><url>
+    <loc>/</loc>
+    <lastmod>2021-09-16T19:01:32+08:00</lastmod>
   </url><url>
     <loc>/post/21/08/userscript-scientific-article-title-translation/</loc>
     <lastmod>2021-08-23T08:30:24+08:00</lastmod>
   </url><url>
     <loc>/tags/%E7%BF%BB%E8%AF%91/</loc>
-    <lastmod>2021-08-23T08:30:24+08:00</lastmod>
-  </url><url>
-    <loc>/</loc>
     <lastmod>2021-08-23T08:30:24+08:00</lastmod>
   </url><url>
     <loc>/post/21/08/r-anova/</loc>

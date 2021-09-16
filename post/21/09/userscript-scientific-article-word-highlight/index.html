@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title> 科技文章自定义词语高亮显示 | 有油</title>
+    
+    
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    <link rel="stylesheet" href="/css/custom.css" />
+    <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="科技文章自定义词语高亮显示"/>
+<meta name="twitter:description" content="一个浏览器用户脚本，自定义词语，在文章内以高亮显示，目前已支持 Inoreader、Elsevier、Wiley、Springer、Nature、Science、PNAS 各网站"/>
+
+
+  </head>
+
+  <body>
+
+    <nav class="menu">
+    <ul>
+      <li class="left">
+        <a href="/"><span>有油</span></a>
+      </li>
+      
+      <li>
+        <a href="/">首页</a>
+      </li>
+      
+      <li>
+        <a href="/digest/">摘讯</a>
+      </li>
+      
+      <li id="menu-search">
+        <a href="/#">搜索</a>
+      </li>
+      
+      <li>
+        <a href="/index.xml">订阅</a>
+      </li>
+      
+    </ul>
+    </nav>
+
+
+<div class="container single">
+<main>
+
+<div class="article-meta">
+<h1><span class="title">科技文章自定义词语高亮显示</span></h1>
+
+<h3 class="author">
+sanchufy
+</h3>
+
+<h3 class="date">2021-09-16</h3>
+<p class="terms">
+  
+  
+  Categories: <a href="/categories/javascript">javascript</a> <a href="/categories/%E5%B7%A5%E5%85%B7">工具</a> 
+  
+  
+  
+  Tags: <a href="/tags/userscript">userscript</a> <a href="/tags/%E9%98%85%E8%AF%BB">阅读</a> 
+  
+  
+</p>
+</div>
+
+<div class="article">
+<p>我们在阅读文章时，有些字词是我们想要特别关注的，如果可以被标记出来，想必会有利于阅读。在浏览器中这可以使用搜索功能，使某些词（即检索词）高亮显示，但毕竟、终究不够“懒”。故闲暇又水了一个浏览器用户脚本 (userscript)<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>，通过自定义比较关注的一至多个主题词（允许使用正则表达式），当文章中一旦出现这些主题词时则自动以高亮显示。结合翻译脚本，<del>又</del>可以愉快的看文献了！</p>
+<p>已支持的网站有：</p>
+<ul>
+<li><a href="https://www.inoreader.com/">Inoreader</a> 或 <a href="https://www.innoreader.com/">Innoreader</a></li>
+<li><a href="https://onlinelibrary.wiley.com/">Wiley</a></li>
+<li><a href="http://www.sciencedirect.com/">ScienceDirect</a> (Elsevier)</li>
+<li><a href="https://link.springer.com/">Springer</a></li>
+<li><a href="https://www.nature.com/">Nature</a></li>
+<li><a href="https://www.science.org/">Science</a></li>
+<li><a href="https://www.pnas.org/">PNAS</a></li>
+</ul>
+<p>目前主题词的设定，需直接写入脚本中，这是一个示例：</p>
+<pre><code class="language-js">var letI_Wrapper = new wrapTextWithElement ('conservation|\
+    biological\\s*\\w*\\s*\\w*\\s*invasion|\
+    restoration|ecosystems?'), '&lt;span class=&quot;coloredWord&quot;&gt;');
+</code></pre>
+<p>它匹配了如下这些词：</p>
+<ul>
+<li>conservation</li>
+<li>biological * invasion：此处 * 表示允许词组中间出现任意长度的 0 至 2 个词（含数字）</li>
+<li>restoration</li>
+<li>ecosystem 或 ecosystems</li>
+</ul>
+<p>在脚本中修改对应位置的主题词，即可实现适合自己的自定义设置。</p>
+<p>以下是部分效果展示：</p>
+<p>
+  <figure>
+    <img src="/assets/image/21-09-innoreader-highlight.png" alt="Innoreader 阅读页面">
+    <figcaption>Figure 1: Innoreader 主题词高亮</figcaption>
+  </figure>
+
+</p>
+<p>
+  <figure>
+    <img src="/assets/image/21-09-Wiley-highlight.png" alt="Wiley 文章页面">
+    <figcaption>Figure 2: Wiley 主题词高亮</figcaption>
+  </figure>
+
+</p>
+<p>
+  <figure>
+    <img src="/assets/image/21-09-ScienceDirect-highlight.png" alt="Elsevier/ScienceDirect 文章页面">
+    <figcaption>Figure 3: Elsevier/ScienceDirect 主题词高亮</figcaption>
+  </figure>
+
+</p>
+<p>
+  <figure>
+    <img src="/assets/image/21-09-Springer-highlight.png" alt="Springer 文章页面">
+    <figcaption>Figure 4: Springer 主题词高亮</figcaption>
+  </figure>
+
+</p>
+<p>本人并没有学过 Javascript，这个脚本毫无意外是东拼西凑形成的，罗列如下并表示感谢：</p>
+<ul>
+<li><a href="https://stackoverflow.com/a/14178388">How to change the color of one specific letter on a web page (wrap the text)?</a></li>
+<li><a href="https://gist.github.com/BrockA/2625891">waitForKeyElements.js</a></li>
+<li><a href="https://greasyfork.org/zh-CN/scripts/378277-%E7%BF%BB%E8%AF%91%E6%9C%BA/code">翻译机</a></li>
+</ul>
+<section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1" role="doc-endnote">
+<p>前一个是：<a href="/post/21/08/userscript-scientific-article-title-translation/">科技文章标题翻译脚本</a>&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
+
+</div>
+</main>
+
+
+<section class="appendix">
+
+
+<div>
+  <div class="side side-left"><h3>重复使用</h3></div>
+  本文文字和图表使用<a href="https://creativecommons.org/licenses/by/4.0/">知识共享许可协议 CC BY 4.0</a>，<a href="https://github.com/pftz/pftz">源文件</a>采用 MIT 协议。
+</div>
+
+
+
+<div>
+  <div class="side side-left"><h3>欢迎修订</h3></div>
+  
+  
+  
+    
+    
+  
+  如果您发现本文里含有任何错误（包括错别字和标点符号），欢迎<a href="https://github.com/pftz/pftz/edit/master/content/post/2021-09-16-userscript-scientific-article-word-highlight/index.md" id="edit-link">在本站的 GitHub 项目里提交修订意见。</a>
+</div>
+
+
+
+<div>
+  <div class="side side-left"><h3>欢迎留言</h3></div>
+  <script src="https://utteranc.es/client.js"
+      repo="pftz/pftz"
+      issue-term="pathname"
+      label="comment"
+      theme="github-light"
+      crossorigin="anonymous"
+      async>
+  </script>
+</div>
+</section>
+
+
+
+
+<nav class="post-nav">
+  <span class="nav-next">&larr; <a href="/post/21/08/userscript-scientific-article-title-translation/" title=下一篇&#32;(旧)>科技文章标题翻译脚本</a></span>
+  &hercon;
+  <span class="nav-prev"></span>
+</nav>
+
+
+
+
+
+</div>
+
+
+  <footer>
+  <script async src="//yihui.org/js/center-img.js"></script>
+
+
+
+<script src="//yihui.org/js/math-code.js"></script>
+<script async src="//mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>
+hljs.configure({languages: []});
+hljs.initHighlightingOnLoad();
+</script>
+
+
+  <div class="footer">
+  
+  <ul class="copyright">
+    <li>© PFTZ (2021 - 2021)</li>
+  </ul>
+  
+  <ul>
+    
+    <li>
+      <a href="/archives/">归档</a>
+    </li>
+    
+    <li class="optional">
+      <a href="/categories/">分类</a>
+    </li>
+    
+    <li class="optional">
+      <a href="/tags/">标签</a>
+    </li>
+    
+    <li id="menu-edit">
+      <a href="#">编辑</a>
+    </li>
+    
+    <li>
+      <a href="#">顶部</a>
+    </li>
+    
+  </ul>
+  </div>
+  
+  </footer>
+  <script async src="/js/features.js" data-page-features="[[&#34;&#43;sidenotes&#34;],[&#34;&#43;sidenotes&#34;],null]"></script>
+  </body>
+</html>
+
