@@ -5,14 +5,14 @@
     <description>Recent content in 首页 on 有油</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Thu, 16 Sep 2021 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 17 Sep 2021 00:00:00 +0000</lastBuildDate>
     <atom:link href="/" rel="self" type="application/rss+xml" />
 
     
       <item>
         <title>Posts</title>
         <link>/post/</link>
-        <pubDate>Thu, 16 Sep 2021 00:00:00 +0000</pubDate>
+        <pubDate>Fri, 17 Sep 2021 00:00:00 +0000</pubDate>
         
         <guid>/post/</guid>
         <description>
@@ -43,6 +43,11 @@
 &lt;h2 class=&#34;archive-title&#34;&gt;2021&lt;/h2&gt;
 &lt;ul&gt;
   
+  &lt;li&gt;
+  &lt;span class=&#34;date&#34;&gt;2021/09/17&lt;/span&gt;
+  &lt;a href=&#34;/post/21/09/userscript-one-click-jumping/&#34;&gt;搜索引擎之间一键跳转脚本&lt;/a&gt;
+&lt;/li&gt;
+
   &lt;li&gt;
   &lt;span class=&#34;date&#34;&gt;2021/09/16&lt;/span&gt;
   &lt;a href=&#34;/post/21/09/userscript-scientific-article-word-highlight/&#34;&gt;科技文章自定义词语高亮显示&lt;/a&gt;

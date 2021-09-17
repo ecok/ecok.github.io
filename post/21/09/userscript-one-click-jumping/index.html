@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title> 搜索引擎之间一键跳转脚本 | 有油</title>
+    
+    
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    <link rel="stylesheet" href="/css/custom.css" />
+    <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="搜索引擎之间一键跳转脚本"/>
+<meta name="twitter:description" content="早期写的脚本，在百度中完成一次检索后，如不满意，想查看必应中相同检索词的检索结果，那么这个脚本可以实现一键跳转。"/>
+
+
+  </head>
+
+  <body>
+
+    <nav class="menu">
+    <ul>
+      <li class="left">
+        <a href="/"><span>有油</span></a>
+      </li>
+      
+      <li>
+        <a href="/">首页</a>
+      </li>
+      
+      <li>
+        <a href="/digest/">摘讯</a>
+      </li>
+      
+      <li id="menu-search">
+        <a href="/#">搜索</a>
+      </li>
+      
+      <li>
+        <a href="/index.xml">订阅</a>
+      </li>
+      
+    </ul>
+    </nav>
+
+
+<div class="container single">
+<main>
+
+<div class="article-meta">
+<h1><span class="title">搜索引擎之间一键跳转脚本</span></h1>
+
+<h3 class="author">
+sanchufy
+</h3>
+
+<h3 class="date">2021-09-17</h3>
+<p class="terms">
+  
+  
+  Categories: <a href="/categories/javascript">javascript</a> <a href="/categories/%E5%B7%A5%E5%85%B7">工具</a> 
+  
+  
+  
+  Tags: <a href="/tags/userscript">userscript</a> <a href="/tags/%E6%90%9C%E7%B4%A2">搜索</a> 
+  
+  
+</p>
+</div>
+
+<div class="article">
+<p>再挂一个早期写的脚本，不求优雅但求实用。</p>
+<p>尽管学术和科技内容，个人更偏好谷歌检索，但也不否认每个搜索引擎都有其各自的长处。比如，百度中可查用户标记的骚扰电话，必应的货币转换识别似乎比谷歌更友好，等等。倘若，完成一次检索后，想再查看另一搜索引擎的结果，一般的操作当然是先复制检索词，然后打开另一搜索引擎的网页，再粘贴检索词，最后回车查看。可是促使世界不断进步的“懒”人，肯定不能安于这种不时重复的机械劳动。</p>
+<p>这个脚本就是为了解决这一痛点写的，它支持在以下的搜索引擎中，通过一个快捷键（加粗的<strong>字母</strong>表示）自动跳转至另一搜索引擎，呈现的结果使用与跳转前的页面相同的检索词：</p>
+<ul>
+<li><strong>g</strong>: <a href="https://ceres.shuu.cf/extdomains/www.google.com.hk/">谷歌镜像</a></li>
+<li><strong>b</strong>: <a href="https://cn.bing.com/">必应</a></li>
+<li><strong>x</strong>: <a href="https://scholar.lanfanshu.cn/">学术镜像（谷歌）</a></li>
+<li><strong>d</strong>: <a href="https://www.baidu.com/">度娘</a></li>
+<li><strong>s</strong>: <a href="https://gg.yhbl.workers.dev/">山寨蒙面谷歌</a><sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></li>
+</ul>
+<p>（注意：在同一个页面内跳转，即覆盖原检索页面）</p>
+<p>功能简单，没什么好展示的了，<a href="/userscript/GBB-jump.user.js">这里是脚本链接</a>。</p>
+<section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1" role="doc-endnote">
+<p>与谷歌搜索的结果一致，但提供更好地匿名性和隐私保护功能。&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
+
+</div>
+</main>
+
+
+<section class="appendix">
+
+
+<div>
+  <div class="side side-left"><h3>重复使用</h3></div>
+  本文文字和图表使用<a href="https://creativecommons.org/licenses/by/4.0/">知识共享许可协议 CC BY 4.0</a>，<a href="https://github.com/pftz/pftz">源文件</a>采用 MIT 协议。
+</div>
+
+
+
+<div>
+  <div class="side side-left"><h3>欢迎修订</h3></div>
+  
+  
+  
+    
+    
+  
+  如果您发现本文里含有任何错误（包括错别字和标点符号），欢迎<a href="https://github.com/pftz/pftz/edit/master/content/post/21-09-userscript-one-click-jumping.md" id="edit-link">在本站的 GitHub 项目里提交修订意见。</a>
+</div>
+
+
+
+<div>
+  <div class="side side-left"><h3>欢迎留言</h3></div>
+  <script src="https://utteranc.es/client.js"
+      repo="pftz/pftz"
+      issue-term="pathname"
+      label="comment"
+      theme="github-light"
+      crossorigin="anonymous"
+      async>
+  </script>
+</div>
+</section>
+
+
+
+
+<nav class="post-nav">
+  <span class="nav-next">&larr; <a href="/post/21/09/userscript-scientific-article-word-highlight/" title=下一篇&#32;(旧)>科技文章自定义词语高亮显示</a></span>
+  &hercon;
+  <span class="nav-prev"></span>
+</nav>
+
+
+
+
+
+</div>
+
+
+  <footer>
+  <script async src="//yihui.org/js/center-img.js"></script>
+
+
+
+
+
+
+
+
+  <div class="footer">
+  
+  <ul class="copyright">
+    <li>© PFTZ (2021 - 2021)</li>
+  </ul>
+  
+  <ul>
+    
+    <li>
+      <a href="/archives/">归档</a>
+    </li>
+    
+    <li class="optional">
+      <a href="/categories/">分类</a>
+    </li>
+    
+    <li class="optional">
+      <a href="/tags/">标签</a>
+    </li>
+    
+    <li id="menu-edit">
+      <a href="#">编辑</a>
+    </li>
+    
+    <li>
+      <a href="#">顶部</a>
+    </li>
+    
+  </ul>
+  </div>
+  
+  </footer>
+  <script async src="/js/features.js" data-page-features="[[&#34;&#43;sidenotes&#34;],[&#34;&#43;sidenotes&#34;],null]"></script>
+  </body>
+</html>
+
