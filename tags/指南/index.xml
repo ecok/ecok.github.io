@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>指南 on 生息</title>
+    <link>/tags/%E6%8C%87%E5%8D%97/</link>
+    <description>Recent content in 指南 on 生息</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Mon, 04 Oct 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/%E6%8C%87%E5%8D%97/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Markdown 简明指南</title>
+      <link>/s/21/10/markdown-intro/</link>
+      <pubDate>Mon, 04 Oct 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/s/21/10/markdown-intro/</guid>
+      <description>## Markdown vs. Word vs. 其它 | | Word | .blue[Markdown] | HTML | |------|---------------------|--------------------------|----------------------------------| | 格式 | 开放的 XML 的封装 | **简单**标记的纯文本 | 复杂标记的纯文本 | | 模式 | 内容、样式同步处理 | 以内容为主，样式单独设定 | 通过其它工具生成内容，样式另设定 | | 阅读 | 所见即所得 (WYSIWYG)| 可渲染成多种其它格式 | 浏览器中查看，可交互 | | 编辑 | 仅特定软件可以编辑 | 任意文本编辑器可编辑 | 鲜少人工直接编辑 | 其它工具： - `\(\LaTeX\)` - Microsoft OneNote - Adobe Indesign (ID) ... --- ## 其它区别与比较 - 文件大小 - 格式转换 - 版本控制 Git - 表格、脚注、引用等高级样式 - 常见用途：做笔记、写电子邮件、写论文、写书、写博客文章、制作幻灯片等 ?</description>
+    </item>
+    
+  </channel>
+</rss>

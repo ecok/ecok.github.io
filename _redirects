@@ -1,3 +1,14 @@
-/post/21/08/userscript-scientific-article-title-translation/userscript     /userscript/article-title-translator.user.js
-/post/21/09/userscript-scientific-article-word-highlight/userscript     /userscript/article-word-highlight.user.js
-/post/21/09/userscript-one-click-jumping/userscript     /userscript/GBB-jump.user.js
+/p/21/08/r-anova/r            /p/21/08/r-anova/fun_mulcomp_tukey.R
+/p/21/08/r-anova/download     /p/21/08/r-anova/fun_mulcomp_tukey.R
+
+/p/21/08/userscript-scientific-article-title-translation/js          /userscript/article-title-translator.user.js
+/p/21/08/userscript-scientific-article-title-translation/download    /userscript/article-title-translator.user.js
+
+/p/21/09/userscript-scientific-article-word-highlight/js          /userscript/article-word-highlight.user.js
+/p/21/09/userscript-scientific-article-word-highlight/download    /userscript/article-word-highlight.user.js
+
+/p/21/09/userscript-one-click-jumping/js          /userscript/GBB-jump.user.js
+/p/21/09/userscript-one-click-jumping/download    /userscript/GBB-jump.user.js
+
+/s/21/10/markdown-intro/pdf         /assets/slides/markdown-intro.pdf
+/s/21/10/markdown-intro/download    /assets/slides/markdown-intro.pdf
