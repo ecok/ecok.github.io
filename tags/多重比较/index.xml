@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>多重比较 on 有油</title>
+    <title>多重比较 on 生息</title>
     <link>/tags/%E5%A4%9A%E9%87%8D%E6%AF%94%E8%BE%83/</link>
-    <description>Recent content in 多重比较 on 有油</description>
+    <description>Recent content in 多重比较 on 生息</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <lastBuildDate>Fri, 06 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/%E5%A4%9A%E9%87%8D%E6%AF%94%E8%BE%83/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>R 方差分析：以多物种、双因素为例</title>
-      <link>/post/21/08/r-anova/</link>
+      <link>/p/21/08/r-anova/</link>
       <pubDate>Fri, 06 Aug 2021 00:00:00 +0000</pubDate>
       
-      <guid>/post/21/08/r-anova/</guid>
+      <guid>/p/21/08/r-anova/</guid>
       <description>更新：
  2021-08-06 添加三因素及多因素，各因素组内的多重比较  警示：水平有限，以下内容均有可能存在错漏！
 如有发现，请下方留言或提交 pull request，感谢您的贡献！

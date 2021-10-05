@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>阅读 on 有油</title>
+    <title>阅读 on 生息</title>
     <link>/tags/%E9%98%85%E8%AF%BB/</link>
-    <description>Recent content in 阅读 on 有油</description>
+    <description>Recent content in 阅读 on 生息</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <lastBuildDate>Thu, 16 Sep 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/%E9%98%85%E8%AF%BB/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>科技文章自定义词语高亮显示</title>
-      <link>/post/21/09/userscript-scientific-article-word-highlight/</link>
+      <link>/p/21/09/userscript-scientific-article-word-highlight/</link>
       <pubDate>Thu, 16 Sep 2021 00:00:00 +0000</pubDate>
       
-      <guid>/post/21/09/userscript-scientific-article-word-highlight/</guid>
+      <guid>/p/21/09/userscript-scientific-article-word-highlight/</guid>
       <description>我们在阅读文章时，有些字词是我们特别想要关注的，幻想如果被标记出来，势必会读得飞起。在浏览器中这可以使用搜索功能，使某些词（即检索词）高亮显示，但毕竟这种姿势也太不“懒”了。故闲暇又水了一个浏览器用户脚本 (userscript)1，通过自行设定想要关注的一至多个主题词（允许使用正则表达式），当文章中一旦出现这些主题词时则自动以高亮显示。结合之前的翻译脚本，又可以愉快的看文献了！
 已支持的网站有：
  Inoreader 或 Innoreader Wiley ScienceDirect (Elsevier) Springer Nature Science PNAS  目前主题词的设定，需直接写入脚本中，这是一个示例：

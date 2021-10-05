@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>cheatsheet on 有油</title>
+    <title>cheatsheet on 生息</title>
     <link>/tags/cheatsheet/</link>
-    <description>Recent content in cheatsheet on 有油</description>
+    <description>Recent content in cheatsheet on 生息</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <lastBuildDate>Wed, 04 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/cheatsheet/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>R 速查表：标准假设检验</title>
-      <link>/note/r-cheatsheet-standard-tests/</link>
+      <link>/n/21/08/r-cheatsheet-standard-tests/</link>
       <pubDate>Wed, 04 Aug 2021 00:00:00 +0000</pubDate>
       
-      <guid>/note/r-cheatsheet-standard-tests/</guid>
+      <guid>/n/21/08/r-cheatsheet-standard-tests/</guid>
       <description>常常为了快速查找 R 函数，会把一些功能相近的 R 函数做成速查表（cheat sheets/cheatsheets，也见翻译成小抄、备忘录），便于索引、参考，比如，RStudio 做了很多这种速查表（管理的 Github 仓库）。记得早几年也有过一些流行的中文翻译版，想必难以与原版的更新同步，又正值如今网上资源泛滥，流传得少了。
 统计分析也有一些这样的速查表，似乎容易被大众忽略。印象比较深的是统计之都上的一篇文章《翻译：常见统计检验的本质都是线性模型（或：如何教统计学）》，尽管这个表格并不是以速查表作为目的而设计。
 使用 R 进行统计分析的速查表似乎较少见到，但“我”更愿意相信：我能想到的东西别人也能想到，只是还没有被自己发现。遂搜了一下，的确是有的，比如Statistics Cheat Sheets（Basic statistics with R Cheat Sheet），看来日后也可收集一二。

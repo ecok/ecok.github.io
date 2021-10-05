@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>userscript on 有油</title>
+    <title>userscript on 生息</title>
     <link>/tags/userscript/</link>
-    <description>Recent content in userscript on 有油</description>
+    <description>Recent content in userscript on 生息</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <lastBuildDate>Fri, 17 Sep 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/userscript/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>搜索引擎之间一键相互跳转脚本</title>
-      <link>/post/21/09/userscript-one-click-jumping/</link>
+      <link>/p/21/09/userscript-one-click-jumping/</link>
       <pubDate>Fri, 17 Sep 2021 00:00:00 +0000</pubDate>
       
-      <guid>/post/21/09/userscript-one-click-jumping/</guid>
+      <guid>/p/21/09/userscript-one-click-jumping/</guid>
       <description>再挂一个早期写的脚本，不求优雅但求实用。
 尽管学术和科技内容，个人更偏好谷歌检索，但也不否认每个搜索引擎都有其各自的长处。比如，百度中可查用户标记的骚扰电话，必应的货币转换识别似乎比谷歌更友好，等等。倘若，完成一次检索后，想再查看另一搜索引擎的结果，一般的操作当然是先复制检索词，然后打开另一搜索引擎的网页，再粘贴检索词，最后回车查看。可是促使世界不断进步的“懒”人，肯定不能安于这种不时再三重复的机械劳动。
 这个脚本就是为了解决这一痛点写的，它支持在以下的任意搜索引擎中，通过一个快捷键（加粗的字母表示）自动跳转至另一搜索引擎，并采用与跳转前的页面相同的检索词进行检索：
@@ -24,10 +24,10 @@
     
     <item>
       <title>科技文章自定义词语高亮显示</title>
-      <link>/post/21/09/userscript-scientific-article-word-highlight/</link>
+      <link>/p/21/09/userscript-scientific-article-word-highlight/</link>
       <pubDate>Thu, 16 Sep 2021 00:00:00 +0000</pubDate>
       
-      <guid>/post/21/09/userscript-scientific-article-word-highlight/</guid>
+      <guid>/p/21/09/userscript-scientific-article-word-highlight/</guid>
       <description>我们在阅读文章时，有些字词是我们特别想要关注的，幻想如果被标记出来，势必会读得飞起。在浏览器中这可以使用搜索功能，使某些词（即检索词）高亮显示，但毕竟这种姿势也太不“懒”了。故闲暇又水了一个浏览器用户脚本 (userscript)1，通过自行设定想要关注的一至多个主题词（允许使用正则表达式），当文章中一旦出现这些主题词时则自动以高亮显示。结合之前的翻译脚本，又可以愉快的看文献了！
 已支持的网站有：
  Inoreader 或 Innoreader Wiley ScienceDirect (Elsevier) Springer Nature Science PNAS  目前主题词的设定，需直接写入脚本中，这是一个示例：
@@ -39,10 +39,10 @@ var letI_Wrapper = new wrapTextWithElement (&#39;conservation|\ biological\\s*\\
     
     <item>
       <title>科技文章标题翻译脚本</title>
-      <link>/post/21/08/userscript-scientific-article-title-translation/</link>
+      <link>/p/21/08/userscript-scientific-article-title-translation/</link>
       <pubDate>Mon, 23 Aug 2021 00:00:00 +0000</pubDate>
       
-      <guid>/post/21/08/userscript-scientific-article-title-translation/</guid>
+      <guid>/p/21/08/userscript-scientific-article-title-translation/</guid>
       <description>最开始是看到小伙伴在开始选题时，在 Web of Science 上使用划词翻译软件快速阅读、筛选大量相关文章——一篇一篇取词、翻译、再取词、再翻译&amp;hellip;&amp;hellip;当然，这是我们大家都很熟悉的动作了。当时，深深觉得这应该是脚本很适合干的活儿。
 最近便发现一个十分强大的用户脚本&amp;mdash;&amp;mdash;翻译机：该脚本用于翻译各类常用社交网站为中文，不会经过中间服务器，可以实现这样的功能。这个脚本格式清晰，也比较好入手&amp;quot;借鉴抄袭&amp;quot;。Ta 已经把最核心的调用翻译工具的代码都写好了，并且设定了很友好的框架逻辑，看起来剩下的只要会简单的 CSS 选择器，就可以很方便地&amp;quot;移植抄袭&amp;quot;了。
 原脚本支持的翻译网站仅是社交网站，未免太浪费了。内置的翻译源包括：谷歌翻译、有道翻译、 彩云小译、必应翻译等 8 种以上主流的来源1，已经非常强大够用了。

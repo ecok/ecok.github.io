@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title> R 方差分析：以多物种、双因素为例 | 有油</title>
+    <title> R 方差分析：以多物种、双因素为例 | 生息</title>
     
     
     <link rel="stylesheet" href="/css/style.css" />
@@ -24,7 +24,7 @@
     <nav class="menu">
     <ul>
       <li class="left">
-        <a href="/"><span>有油</span></a>
+        <a href="/"><span>生息</span></a>
       </li>
       
       <li>
@@ -73,7 +73,7 @@ sanchufy
 
 <div class="article">
 
-<script src="/post/21/08/r-anova/index_files/header-attrs/header-attrs.js"></script>
+<script src="/p/21/08/r-anova/index_files/header-attrs/header-attrs.js"></script>
 
 
 <p><strong>更新：</strong></p>
@@ -160,7 +160,7 @@ summary(df)</code></pre>
 # 箱线图
 boxplot(biomass ~ drought + fertilizer, data = df)</code></pre>
 <div class="figure"><span id="fig:boxplot-two-factors"></span>
-<img src="/post/21/08/r-anova/index_files/figure-html/boxplot-two-factors-1.svg" alt="双因素非交互箱线图" width="672" />
+<img src="/p/21/08/r-anova/index_files/figure-html/boxplot-two-factors-1.svg" alt="双因素非交互箱线图" width="672" />
 <p class="caption">
 Figure 1: 双因素非交互箱线图
 </p>
@@ -174,7 +174,7 @@ xyplot(biomass ~ drought | fertilizer,
        type=&#39;b&#39;, auto.key = list(columns = 4),
        scales=list(alternating=FALSE))</code></pre>
 <div class="figure"><span id="fig:descriptive-statistics-1"></span>
-<img src="/post/21/08/r-anova/index_files/figure-html/descriptive-statistics-1.svg" alt="描述性统计" width="672" />
+<img src="/p/21/08/r-anova/index_files/figure-html/descriptive-statistics-1.svg" alt="描述性统计" width="672" />
 <p class="caption">
 Figure 2: 描述性统计
 </p>
@@ -186,7 +186,7 @@ ggplot(df, aes(x = biomass)) +
     facet_wrap(~ species, ncol = 2) + 
     theme_bw()</code></pre>
 <div class="figure"><span id="fig:descriptive-statistics-2"></span>
-<img src="/post/21/08/r-anova/index_files/figure-html/descriptive-statistics-2.svg" alt="描述性统计" width="672" />
+<img src="/p/21/08/r-anova/index_files/figure-html/descriptive-statistics-2.svg" alt="描述性统计" width="672" />
 <p class="caption">
 Figure 3: 描述性统计
 </p>
@@ -197,7 +197,7 @@ ggplot(df, aes(x = drought, y = biomass,
     geom_boxplot() +
     facet_wrap(~species, scale=&quot;free&quot;)</code></pre>
 <div class="figure"><span id="fig:descriptive-statistics-3"></span>
-<img src="/post/21/08/r-anova/index_files/figure-html/descriptive-statistics-3.svg" alt="描述性统计" width="672" />
+<img src="/p/21/08/r-anova/index_files/figure-html/descriptive-statistics-3.svg" alt="描述性统计" width="672" />
 <p class="caption">
 Figure 4: 描述性统计
 </p>
@@ -230,7 +230,7 @@ ggplot(bygroup_mean, aes(x = drought, y = biomass,
                  position=position_dodge(.9)) +
     facet_wrap(~species, scale=&quot;free&quot;)</code></pre>
 <div class="figure"><span id="fig:descriptive-statistics-4"></span>
-<img src="/post/21/08/r-anova/index_files/figure-html/descriptive-statistics-4.svg" alt="描述性统计" width="672" />
+<img src="/p/21/08/r-anova/index_files/figure-html/descriptive-statistics-4.svg" alt="描述性统计" width="672" />
 <p class="caption">
 Figure 5: 描述性统计
 </p>
@@ -845,7 +845,7 @@ with(df, by(df, species, function (d){
         pch = c(1, 16),
         main = &quot;Interaction between drought and fertilizer&quot;))}))</code></pre>
 <div class="figure"><span id="fig:interaction-added"></span>
-<img src="/post/21/08/r-anova/index_files/figure-html/interaction-added-1.svg" alt="叠加处理交互作用" width="672" />
+<img src="/p/21/08/r-anova/index_files/figure-html/interaction-added-1.svg" alt="叠加处理交互作用" width="672" />
 <p class="caption">
 Figure 6: 叠加处理交互作用
 </p>
@@ -873,7 +873,7 @@ by(df, df$species, function (d){
     main = &quot;Interaction Plot with 95% CIs&quot;,
     xlab = &quot;drought:Fertilizer&quot;)})</code></pre>
 <div class="figure"><span id="fig:interaction-pairs"></span>
-<img src="/post/21/08/r-anova/index_files/figure-html/interaction-pairs-1.svg" alt="配对处理交互作用" width="672" />
+<img src="/p/21/08/r-anova/index_files/figure-html/interaction-pairs-1.svg" alt="配对处理交互作用" width="672" />
 <p class="caption">
 Figure 7: 配对处理交互作用
 </p>
@@ -896,7 +896,7 @@ df_aa &lt;- subset(df, species == &quot;AA&quot;)
 library(HH)
 interaction2wt(biomass ~ drought*fertilizer, data = df_aa)</code></pre>
 <div class="figure"><span id="fig:interaction-2-way"></span>
-<img src="/post/21/08/r-anova/index_files/figure-html/interaction-2-way-1.svg" alt="主效应和交互作用" width="672" />
+<img src="/p/21/08/r-anova/index_files/figure-html/interaction-2-way-1.svg" alt="主效应和交互作用" width="672" />
 <p class="caption">
 Figure 8: 主效应和交互作用
 </p>
@@ -944,7 +944,7 @@ hsd_b2inter_aa &lt;- HSD.test(aov_b2inter_aa, &quot;D_vs_F_aa&quot;,
     # density = 6,
     border = &quot;black&quot;)</code></pre>
 <div class="figure"><span id="fig:interaction-pairs-comparison"></span>
-<img src="/post/21/08/r-anova/index_files/figure-html/interaction-pairs-comparison-1.svg" alt="配对交互作用比较" width="672" />
+<img src="/p/21/08/r-anova/index_files/figure-html/interaction-pairs-comparison-1.svg" alt="配对交互作用比较" width="672" />
 <p class="caption">
 Figure 9: 配对交互作用比较
 </p>
@@ -953,7 +953,7 @@ Figure 9: 配对交互作用比较
 library(interactions)
 cat_plot(lrm_b2mix_sp$AA, pred = drought, modx = fertilizer, geom = &quot;line&quot;)</code></pre>
 <div class="figure"><span id="fig:interaction-single"></span>
-<img src="/post/21/08/r-anova/index_files/figure-html/interaction-single-1.svg" alt="单物种交互作用" width="672" />
+<img src="/p/21/08/r-anova/index_files/figure-html/interaction-single-1.svg" alt="单物种交互作用" width="672" />
 <p class="caption">
 Figure 10: 单物种交互作用
 </p>
@@ -1039,7 +1039,7 @@ pbox_comp_biomass +
             label = groups, group = treat), 
         position = position_dodge(width = 0.9))</code></pre>
 <div class="figure"><span id="fig:boxplot-multiple-comparison-within-group-1"></span>
-<img src="/post/21/08/r-anova/index_files/figure-html/boxplot-multiple-comparison-within-group-1.svg" alt="组内多重比较箱线图" width="672" />
+<img src="/p/21/08/r-anova/index_files/figure-html/boxplot-multiple-comparison-within-group-1.svg" alt="组内多重比较箱线图" width="672" />
 <p class="caption">
 Figure 11: 组内多重比较箱线图
 </p>
@@ -1058,7 +1058,7 @@ pbox_comp_biomass +
                            symbols = c(&quot;***&quot;, &quot;**&quot;, &quot;*&quot;, &quot;ns&quot;)),
         label.y = 1.2)</code></pre>
 <div class="figure"><span id="fig:boxplot-multiple-comparison-within-group-2"></span>
-<img src="/post/21/08/r-anova/index_files/figure-html/boxplot-multiple-comparison-within-group-2.svg" alt="组内多重比较箱线图" width="672" />
+<img src="/p/21/08/r-anova/index_files/figure-html/boxplot-multiple-comparison-within-group-2.svg" alt="组内多重比较箱线图" width="672" />
 <p class="caption">
 Figure 12: 组内多重比较箱线图
 </p>
@@ -1113,7 +1113,7 @@ pbar_comp_biomass +
         inherit.aes = FALSE,
         show.legend = FALSE)</code></pre>
 <div class="figure"><span id="fig:bar-multiple-comparison-within-group-1"></span>
-<img src="/post/21/08/r-anova/index_files/figure-html/bar-multiple-comparison-within-group-1.svg" alt="组内多重比较柱状图" width="672" />
+<img src="/p/21/08/r-anova/index_files/figure-html/bar-multiple-comparison-within-group-1.svg" alt="组内多重比较柱状图" width="672" />
 <p class="caption">
 Figure 13: 组内多重比较柱状图
 </p>
@@ -1140,7 +1140,7 @@ pbar_comp_biomass +
         inherit.aes = FALSE,
         show.legend = FALSE)</code></pre>
 <div class="figure"><span id="fig:bar-multiple-comparison-within-group-2"></span>
-<img src="/post/21/08/r-anova/index_files/figure-html/bar-multiple-comparison-within-group-2.svg" alt="组内多重比较柱状图" width="672" />
+<img src="/p/21/08/r-anova/index_files/figure-html/bar-multiple-comparison-within-group-2.svg" alt="组内多重比较柱状图" width="672" />
 <p class="caption">
 Figure 14: 组内多重比较柱状图
 </p>
@@ -1168,14 +1168,14 @@ comp_emm_b2in_pairs &lt;- lapply(comp_emm_b2in_within, pairs)
 
 emmip(comp_emm_b2in_within$AA, ~ drought | fertilizer, CIs = TRUE)</code></pre>
 <div class="figure"><span id="fig:emms-multiple-comparison-within-group-1"></span>
-<img src="/post/21/08/r-anova/index_files/figure-html/emms-multiple-comparison-within-group-1.svg" alt="组内多重比较综合图" width="672" />
+<img src="/p/21/08/r-anova/index_files/figure-html/emms-multiple-comparison-within-group-1.svg" alt="组内多重比较综合图" width="672" />
 <p class="caption">
 Figure 15: 组内多重比较综合图
 </p>
 </div>
 <pre class="r"><code>plot(comp_emm_b2in_within$AA, by = &quot;fertilizer&quot;, comparisons = TRUE)</code></pre>
 <div class="figure"><span id="fig:emms-multiple-comparison-within-group-2"></span>
-<img src="/post/21/08/r-anova/index_files/figure-html/emms-multiple-comparison-within-group-2.svg" alt="组内多重比较综合图" width="672" />
+<img src="/p/21/08/r-anova/index_files/figure-html/emms-multiple-comparison-within-group-2.svg" alt="组内多重比较综合图" width="672" />
 <p class="caption">
 Figure 16: 组内多重比较综合图
 </p>
@@ -1201,7 +1201,7 @@ comp_tukey_b1dry_hsd &lt;- TukeyHSD(aov_b1dry)
 par(mar = c(5, 5, 3, 1), las = 1)
 plot(comp_tukey_b1dry_hsd)</code></pre>
 <div class="figure"><span id="fig:general-multiple-comparison-within-group-1"></span>
-<img src="/post/21/08/r-anova/index_files/figure-html/general-multiple-comparison-within-group-1.svg" alt="组内多重比较其它图" width="672" />
+<img src="/p/21/08/r-anova/index_files/figure-html/general-multiple-comparison-within-group-1.svg" alt="组内多重比较其它图" width="672" />
 <p class="caption">
 Figure 17: 组内多重比较其它图
 </p>
@@ -1236,7 +1236,7 @@ tkcld_b1dry &lt;- cld(comp_tukey_b1dry_glht, level = 0.05)
 par(mai=c(1,1,1.5,1))
 plot(tkcld_b1dry, col = &quot;lightgrey&quot;)</code></pre>
 <div class="figure"><span id="fig:general-multiple-comparison-within-group-2"></span>
-<img src="/post/21/08/r-anova/index_files/figure-html/general-multiple-comparison-within-group-2.svg" alt="组内多重比较其它图" width="672" />
+<img src="/p/21/08/r-anova/index_files/figure-html/general-multiple-comparison-within-group-2.svg" alt="组内多重比较其它图" width="672" />
 <p class="caption">
 Figure 18: 组内多重比较其它图
 </p>
@@ -1317,7 +1317,7 @@ pbar_comp_biomass_spp2 +
           group = treat),
       inherit.aes = FALSE)</code></pre>
 <div class="figure"><span id="fig:multiple-comparison-between-group"></span>
-<img src="/post/21/08/r-anova/index_files/figure-html/multiple-comparison-between-group-1.svg" alt="组间多重比较" width="672" />
+<img src="/p/21/08/r-anova/index_files/figure-html/multiple-comparison-between-group-1.svg" alt="组间多重比较" width="672" />
 <p class="caption">
 Figure 19: 组间多重比较
 </p>
@@ -1363,7 +1363,7 @@ Figure 19: 组间多重比较
 par(mfrow = c(2, 2))
 plot(lrm_b2mix_sp$AA)</code></pre>
 <div class="figure"><span id="fig:diagnostics-linear-gression-1"></span>
-<img src="/post/21/08/r-anova/index_files/figure-html/diagnostics-linear-gression-1.svg" alt="回归检验组图" width="672" />
+<img src="/p/21/08/r-anova/index_files/figure-html/diagnostics-linear-gression-1.svg" alt="回归检验组图" width="672" />
 <p class="caption">
 Figure 20: 回归检验组图
 </p>
@@ -1373,7 +1373,7 @@ par(mfrow = c(4, 4))
 lapply(lrm_b2mix_sp, plot)</code></pre>
 <div class="fullwidth">
 <div class="figure"><span id="fig:diagnostics-linear-gression-2"></span>
-<img src="/post/21/08/r-anova/index_files/figure-html/diagnostics-linear-gression-2.svg" alt="回归检验组图" width="672" />
+<img src="/p/21/08/r-anova/index_files/figure-html/diagnostics-linear-gression-2.svg" alt="回归检验组图" width="672" />
 <p class="caption">
 Figure 21: 回归检验组图
 </p>
@@ -1394,7 +1394,7 @@ Figure 21: 回归检验组图
 par(mfrow=c(1,1))
 plot(lrm_b2mix_sp$AA$fitted.values ~ lrm_b2mix_sp$AA$model$biomass)</code></pre>
 <div class="figure"><span id="fig:observed-vs-fitted"></span>
-<img src="/post/21/08/r-anova/index_files/figure-html/observed-vs-fitted-1.svg" alt="拟合效果图" width="672" />
+<img src="/p/21/08/r-anova/index_files/figure-html/observed-vs-fitted-1.svg" alt="拟合效果图" width="672" />
 <p class="caption">
 Figure 22: 拟合效果图
 </p>
@@ -1608,9 +1608,9 @@ comp_hsd_b2in_DIY$AA$drought</code></pre>
 
 
 <nav class="post-nav">
-  <span class="nav-next">&larr; <a href="/post/21/08/r-markdown-tables/" title=下一篇&#32;(旧)>在 Markdown、R Markdown 中使用表格</a></span>
+  <span class="nav-next">&larr; <a href="/p/21/08/r-markdown-tables/" title=下一篇&#32;(旧)>在 Markdown、R Markdown 中使用表格</a></span>
   &hercon;
-  <span class="nav-prev"><a href="/post/21/08/userscript-scientific-article-title-translation/" title=上一篇&#32;(新)>科技文章标题翻译脚本</a> &rarr;</span>
+  <span class="nav-prev"><a href="/p/21/08/userscript-scientific-article-title-translation/" title=上一篇&#32;(新)>科技文章标题翻译脚本</a> &rarr;</span>
 </nav>
 
 
@@ -1644,7 +1644,7 @@ hljs.initHighlightingOnLoad();
   <div class="footer">
   
   <ul class="copyright">
-    <li>© PFTZ (2021 - 2021)</li>
+    <li>© EcoK (2021 - 2021)</li>
   </ul>
   
   <ul>
