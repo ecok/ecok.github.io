@@ -6,7 +6,23 @@
     <description>Recent content in rmarkdown on 生息</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Thu, 05 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/rmarkdown/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 05 Oct 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/rmarkdown/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>xaringan &#43; remark.js 制作幻灯片</title>
+      <link>/s/21/10/xaringan-and-remarkjs/</link>
+      <pubDate>Tue, 05 Oct 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/s/21/10/xaringan-and-remarkjs/</guid>
+      <description>class: center, middle, inverse, title-slide
+xaringan + remark.js 制作幻灯片 🎞 sanchufy 2021-10-05  官方教程 .pull-left[
+xaringan  R Markdown 扩展，可结合 remark.js 生成 HTML5 演示文档。
+ 简明版 Presentation Ninja with xaringan 书籍章节 Chapter 7 xaringan Presentations Wiki 版 yihui/xaringan/wiki ]  .pull-right[
+remark.js  使用 JavaScript 和 CSS 将 Markdown 在浏览器内渲染成幻灯片。
+ 简明版 remark Wiki 版 gnab/remark/wiki ]   两者的主要区别，见：https://slides.yihui.org/xaringan/#15
+ class: inverse, middle, center
+remark.js Markdown 制作幻灯片（基础）  remark.js 核心功能  支持 Markdown，可版本控制 支持各种快捷键（按 h 或 ?</description>
+    </item>
+    
     <item>
       <title>在 Markdown、R Markdown 中使用表格</title>
       <link>/p/21/08/r-markdown-tables/</link>

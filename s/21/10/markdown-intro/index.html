@@ -4,24 +4,26 @@
     <meta charset="utf-8" />
     <title> Markdown 简明指南 | 生息</title>
     
-    <meta name="author" content="sanchufy"/>
+    <meta name="author" content="sanchufy" />
     
     
-    <meta name="date" content="2021-10-04"/>
+    <meta name="date" content="2021-10-04" />
     
     <script src="/libs/header-attrs-2.9/header-attrs.js"></script>
-    <link rel="stylesheet" href="/css/chinese.css" />
+    <link rel="stylesheet" href="/css/chinese.css" type="text/css" />
   </head>
   <body>
-    <textarea id="source">
+
+<textarea id="source">
 class: center, middle, inverse, title-slide
 
-#  Markdown 简明指南 
-##  ⚔&lt;br/&gt;起手式 
+# Markdown 简明指南
+## ⚔&lt;br/&gt;起手式
 ### sanchufy
 ### 2021-10-04
 
 ---
+
 ## Markdown vs. Word vs. 其它
 
 |      | Word                | .blue[Markdown]          | HTML                             |
@@ -313,7 +315,6 @@ class: center, middle, inverse
         highlightLines:  true ,
         countIncrementalSlides:  false ,
       });
-    </script>
     if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
       window.dispatchEvent(new Event('resize'));
     });
@@ -323,12 +324,11 @@ class: center, middle, inverse
       s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
       d.head.appendChild(s);
     })(document);
-    
     (function(d) {
       var el = d.getElementsByClassName("remark-slides-area");
       if (!el) return;
       var slide, slides = slideshow.getSlides(), els = el[0].children;
-      for (var i = 1; i &lt; slides.length; i++) {
+      for (var i = 1; i < slides.length; i++) {
         slide = slides[i];
         if (slide.properties.continued === "true" || slide.properties.count === "false") {
           els[i - 1].className += ' has-continuation';
@@ -338,14 +338,14 @@ class: center, middle, inverse
       s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
       d.head.appendChild(s);
     })(document);
-    // delete the temporary CSS (for displaying all slides initially) when the user
-    // starts to view slides
+    
+    
     (function() {
       var deleted = false;
       slideshow.on('beforeShowSlide', function(slide) {
         if (deleted) return;
         var sheets = document.styleSheets, node;
-        for (var i = 0; i &lt; sheets.length; i++) {
+        for (var i = 0; i < sheets.length; i++) {
           node = sheets[i].ownerNode;
           if (node.dataset["target"] !== "print-only") continue;
           node.parentNode.removeChild(node);
@@ -355,7 +355,7 @@ class: center, middle, inverse
     })();
     (function() {
       "use strict"
-      // Replace <script> tags in slides area to make them executable
+      
       var scripts = document.querySelectorAll(
         '.remark-slides-area .remark-slide-container script'
       );

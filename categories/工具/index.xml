@@ -6,14 +6,34 @@
     <description>Recent content in 工具 on 生息</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Mon, 04 Oct 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/%E5%B7%A5%E5%85%B7/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 05 Oct 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/%E5%B7%A5%E5%85%B7/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>xaringan &#43; remark.js 制作幻灯片</title>
+      <link>/s/21/10/xaringan-and-remarkjs/</link>
+      <pubDate>Tue, 05 Oct 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/s/21/10/xaringan-and-remarkjs/</guid>
+      <description>class: center, middle, inverse, title-slide
+xaringan + remark.js 制作幻灯片 🎞 sanchufy 2021-10-05  官方教程 .pull-left[
+xaringan  R Markdown 扩展，可结合 remark.js 生成 HTML5 演示文档。
+ 简明版 Presentation Ninja with xaringan 书籍章节 Chapter 7 xaringan Presentations Wiki 版 yihui/xaringan/wiki ]  .pull-right[
+remark.js  使用 JavaScript 和 CSS 将 Markdown 在浏览器内渲染成幻灯片。
+ 简明版 remark Wiki 版 gnab/remark/wiki ]   两者的主要区别，见：https://slides.yihui.org/xaringan/#15
+ class: inverse, middle, center
+remark.js Markdown 制作幻灯片（基础）  remark.js 核心功能  支持 Markdown，可版本控制 支持各种快捷键（按 h 或 ?</description>
+    </item>
+    
     <item>
       <title>Markdown 简明指南</title>
       <link>/s/21/10/markdown-intro/</link>
       <pubDate>Mon, 04 Oct 2021 00:00:00 +0000</pubDate>
       
       <guid>/s/21/10/markdown-intro/</guid>
-      <description>## Markdown vs. Word vs. 其它 | | Word | .blue[Markdown] | HTML | |------|---------------------|--------------------------|----------------------------------| | 格式 | 开放的 XML 的封装 | **简单**标记的纯文本 | 复杂标记的纯文本 | | 模式 | 内容、样式同步处理 | 以内容为主，样式单独设定 | 通过其它工具生成内容，样式另设定 | | 阅读 | 所见即所得 (WYSIWYG)| 可渲染成多种其它格式 | 浏览器中查看，可交互 | | 编辑 | 仅特定软件可以编辑 | 任意文本编辑器可编辑 | 鲜少人工直接编辑 | 其它工具： - `\(\LaTeX\)` - Microsoft OneNote - Adobe Indesign (ID) ... --- ## 其它区别与比较 - 文件大小 - 格式转换 - 版本控制 Git - 表格、脚注、引用等高级样式 - 常见用途：做笔记、写电子邮件、写论文、写书、写博客文章、制作幻灯片等 ?</description>
+      <description>Markdown vs. Word vs. 其它     Word .blue[Markdown] HTML     格式 开放的 XML 的封装 简单标记的纯文本 复杂标记的纯文本   模式 内容、样式同步处理 以内容为主，样式单独设定 通过其它工具生成内容，样式另设定   阅读 所见即所得 (WYSIWYG) 可渲染成多种其它格式 浏览器中查看，可交互   编辑 仅特定软件可以编辑 任意文本编辑器可编辑 鲜少人工直接编辑    其它工具：
+ \(\LaTeX\) Microsoft OneNote Adobe Indesign (ID)
+&amp;hellip;   其它区别与比较  文件大小 格式转换 版本控制 Git 表格、脚注、引用等高级样式 常见用途：做笔记、写电子邮件、写论文、写书、写博客文章、制作幻灯片等  ???
+Markdown 通常用于对样式要求不高的简单任务，比如做笔记，但随着它与其他技术的整合，Markdown 的扩展也不断壮大，现在能实现的格式、样式和功能已经十分丰富了！
+ 内在哲学（原则） .</description>
     </item>
     
     <item>

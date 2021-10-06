@@ -6,31 +6,31 @@
     <description>Recent content in Categories on 生息</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Mon, 04 Oct 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 05 Oct 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>R 语言</title>
+      <link>/categories/r-%E8%AF%AD%E8%A8%80/</link>
+      <pubDate>Tue, 05 Oct 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/r-%E8%AF%AD%E8%A8%80/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>工具</title>
       <link>/categories/%E5%B7%A5%E5%85%B7/</link>
-      <pubDate>Mon, 04 Oct 2021 00:00:00 +0000</pubDate>
+      <pubDate>Tue, 05 Oct 2021 00:00:00 +0000</pubDate>
       
       <guid>/categories/%E5%B7%A5%E5%85%B7/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>javascript</title>
+      <title>JavaScript</title>
       <link>/categories/javascript/</link>
       <pubDate>Fri, 17 Sep 2021 00:00:00 +0000</pubDate>
       
       <guid>/categories/javascript/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>R 语言</title>
-      <link>/categories/r-%E8%AF%AD%E8%A8%80/</link>
-      <pubDate>Fri, 06 Aug 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/categories/r-%E8%AF%AD%E8%A8%80/</guid>
       <description></description>
     </item>
     
