@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>文本挖掘 on 生息</title>
+    <link>/tags/%E6%96%87%E6%9C%AC%E6%8C%96%E6%8E%98/</link>
+    <description>Recent content in 文本挖掘 on 生息</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sun, 10 Oct 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/%E6%96%87%E6%9C%AC%E6%8C%96%E6%8E%98/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>正则表达式简明指南</title>
+      <link>/s/21/10/regex-intro/</link>
+      <pubDate>Sun, 10 Oct 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/s/21/10/regex-intro/</guid>
+      <description>参考来源  Ben Forta (福达). 杨涛等译. 2015. 正则表达式必知必会（修订版）. 人民邮电出版社. Jan Goyvaerts, Steven Levithan. 2012. Regular Expressions Cookbook, Second edition. O&amp;rsquo;Reilly Media. Jeffrey E. F. Friedl. 余晟译. 2012. 精通正则表达式. 电子工业出版社. 资源合集：Awesome Regex | Awesome RegEx 其它学习入口：  正则表达式30分钟入门教程 Learn regex the easy way 中文版 by ziishaned 等 | 学习正则表达式的简单方法 by cdoco 等 Reference - What does this regex mean? Regular Expressions Quick Start Wikipedia: Comparison of regular-expression engines     class: inverse</description>
+    </item>
+    
+  </channel>
+</rss>

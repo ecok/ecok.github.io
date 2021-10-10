@@ -92,6 +92,11 @@ pre {
 .remark-code-line{
   padding-left: 1.15em;
 }
+.remark-inline-code{
+  background: #F5F5F5;
+  border-radius: 10px;
+  padding: 4px;
+}
 .inverse pre {
   text-shadow: none;
 }
@@ -106,3 +111,6 @@ th, td {
   font-size: 0.85em;
 }
 .remark-slide thead, .remark-slide tfoot, .remark-slide tr:nth-child(even) { background: #eee }
+.large-table, .large-table th, .large-table td{
+  font-size: 1.2em;
+}

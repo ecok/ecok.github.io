@@ -222,7 +222,7 @@ layout: true
 
 .small[convert *f*rom **markdown** *t*o **html** and put the *o*utput in a *s*tandalone file]
 
-```bash
+```cmd
 pandoc &lt;filename&gt;.md -f markdown -t html -s -o &lt;filename&gt;.html
 ```
 
@@ -240,7 +240,7 @@ pandoc &lt;filename&gt;.md -f markdown -t html -s -o &lt;filename&gt;.html
 如下，可生成含目录 (*T*able *o*f *C*ontent) 的独立文档：
 ]
 
-```bash
+```cmd
 pandoc &#34;&lt;filename&gt;.md&#34; -o &#34;&lt;filename&gt;.html&#34; -f markdown --template GitHubModified.html5 --toc --mathjax --self-contained
 ```
 
@@ -421,7 +421,7 @@ class: center, middle, inverse
     (function () {
       var script = document.createElement('script');
       script.type = 'text/javascript';
-      script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+      script.src  = 'https://cdn.jsdelivr.net/npm/mathjax@latest/MathJax.js?config=TeX-MML-AM_CHTML';
       if (location.protocol !== 'file:' && /^https?:/.test(script.src))
         script.src  = script.src.replace(/^https?:/, '');
       document.getElementsByTagName('head')[0].appendChild(script);

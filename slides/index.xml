@@ -6,7 +6,16 @@
     <description>Recent content in Slides on 生息</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Tue, 05 Oct 2021 00:00:00 +0000</lastBuildDate><atom:link href="/slides/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 10 Oct 2021 00:00:00 +0000</lastBuildDate><atom:link href="/slides/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>正则表达式简明指南</title>
+      <link>/s/21/10/regex-intro/</link>
+      <pubDate>Sun, 10 Oct 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/s/21/10/regex-intro/</guid>
+      <description>参考来源  Ben Forta (福达). 杨涛等译. 2015. 正则表达式必知必会（修订版）. 人民邮电出版社. Jan Goyvaerts, Steven Levithan. 2012. Regular Expressions Cookbook, Second edition. O&amp;rsquo;Reilly Media. Jeffrey E. F. Friedl. 余晟译. 2012. 精通正则表达式. 电子工业出版社. 资源合集：Awesome Regex | Awesome RegEx 其它学习入口：  正则表达式30分钟入门教程 Learn regex the easy way 中文版 by ziishaned 等 | 学习正则表达式的简单方法 by cdoco 等 Reference - What does this regex mean? Regular Expressions Quick Start Wikipedia: Comparison of regular-expression engines     class: inverse</description>
+    </item>
+    
     <item>
       <title>xaringan &#43; remark.js 制作幻灯片</title>
       <link>/s/21/10/xaringan-and-remarkjs/</link>
@@ -14,13 +23,13 @@
       
       <guid>/s/21/10/xaringan-and-remarkjs/</guid>
       <description>class: center, middle, inverse, title-slide
-xaringan + remark.js 制作幻灯片 🎞 sanchufy 2021-10-05  官方教程 .pull-left[
+xaringan + remark.js 制作幻灯片 👁 sanchufy 2021-10-05  官方教程 .pull-left[
 xaringan  R Markdown 扩展，可结合 remark.js 生成 HTML5 演示文档。
  简明版 Presentation Ninja with xaringan 书籍章节 Chapter 7 xaringan Presentations Wiki 版 yihui/xaringan/wiki ]  .pull-right[
 remark.js  使用 JavaScript 和 CSS 将 Markdown 在浏览器内渲染成幻灯片。
  简明版 remark Wiki 版 gnab/remark/wiki ]   两者的主要区别，见：https://slides.yihui.org/xaringan/#15
  class: inverse, middle, center
-remark.js Markdown 制作幻灯片（基础）  remark.js 核心功能  支持 Markdown，可版本控制 支持各种快捷键（按 h 或 ?</description>
+remark.js Markdown 制作幻灯片（基础） 🎞🎞🎞  remark.</description>
     </item>
     
     <item>

@@ -17,7 +17,7 @@
 class: center, middle, inverse, title-slide
 
 #  xaringan &#43; remark.js &lt;br/&gt;制作幻灯片
-## 🎞
+## 👁
 ### sanchufy
 ### 2021-10-05
 
@@ -55,6 +55,7 @@ class: inverse, middle, center
 
 # remark.js
 ### Markdown 制作幻灯片（基础）
+## 🎞🎞🎞
 
 ---
 
@@ -93,7 +94,7 @@ layout: true
 - 全幅背景图片：`background-image: url(image.jpg)`
 - 内容属性：定义样式 (**Content Classes**)：搭配 CSS 设定元素样式
 - 语法高亮：代码块、行内
-    - [支持的语言](https://highlightjs.org/static/demo/)，如 `bash`、`markdown` 等
+    - [支持的语言](https://github.com/highlightjs/highlight.js/blob/main/SUPPORTED_LANGUAGES.md)，如 `DOS`、`Markdown` 等
     - [支持的风格](https://github.com/gnab/remark/wiki/Configuration#highlighting)，如 `github`、`solarized-light` 等
 - 幻灯片页面比例、计时等
 
@@ -310,7 +311,7 @@ class: inverse, middle, center
     (function () {
       var script = document.createElement('script');
       script.type = 'text/javascript';
-      script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+      script.src  = 'https://cdn.jsdelivr.net/npm/mathjax@latest/MathJax.js?config=TeX-MML-AM_CHTML';
       if (location.protocol !== 'file:' && /^https?:/.test(script.src))
         script.src  = script.src.replace(/^https?:/, '');
       document.getElementsByTagName('head')[0].appendChild(script);
