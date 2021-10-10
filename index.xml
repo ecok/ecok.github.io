@@ -10,6 +10,17 @@
 
     
       <item>
+        <title>Notes</title>
+        <link>/note/</link>
+        <pubDate>Sun, 10 Oct 2021 00:00:00 +0000</pubDate>
+        
+        <guid>/note/</guid>
+        <description>
+          
+        </description>
+      </item>
+    
+      <item>
         <title>Slides</title>
         <link>/slides/</link>
         <pubDate>Sun, 10 Oct 2021 00:00:00 +0000</pubDate>
@@ -32,17 +43,6 @@
       </item>
     
       <item>
-        <title>Notes</title>
-        <link>/note/</link>
-        <pubDate>Wed, 04 Aug 2021 00:00:00 +0000</pubDate>
-        
-        <guid>/note/</guid>
-        <description>
-          
-        </description>
-      </item>
-    
-      <item>
         <title>归档</title>
         <link>/archives/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
@@ -54,6 +54,11 @@
 &lt;h2 class=&#34;archive-title&#34;&gt;2021&lt;/h2&gt;
 &lt;ul&gt;
   
+  &lt;li&gt;
+  &lt;span class=&#34;date&#34;&gt;2021/10/10&lt;/span&gt;
+  &lt;a href=&#34;/n/21/10/over-the-wall/&#34;&gt;飞檐走壁，漫山越岭&lt;/a&gt;
+&lt;/li&gt;
+
   &lt;li&gt;
   &lt;span class=&#34;date&#34;&gt;2021/10/10&lt;/span&gt;
   &lt;a href=&#34;/s/21/10/regex-intro/&#34;&gt;正则表达式简明指南&lt;/a&gt;
